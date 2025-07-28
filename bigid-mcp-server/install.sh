@@ -152,7 +152,7 @@ if [ ! -d "dist" ]; then
         print_success "Project built successfully"
     else
         print_error "No dist directory found and no build script available"
-        print_error "This appears to be a pre-built package but the dist directory is missing"
+        print_error "This package requires TypeScript compilation but no build script is available"
         exit 1
     fi
 else

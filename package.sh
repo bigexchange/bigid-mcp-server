@@ -91,16 +91,15 @@ PACKAGE_DIR="${TEMP_DIR}/${PACKAGE_NAME}"
 print_status "Creating temporary packaging directory: $PACKAGE_DIR"
 mkdir -p "$PACKAGE_DIR"
 
-# Build the project first
-print_status "Building TypeScript files..."
+# Install dependencies (but don't build - let users build themselves)
+print_status "Installing dependencies..."
 cd bigid-mcp-server
 npm install
-npm run build
 cd ..
 
-# Copy files to temporary directory
-print_status "Copying files..."
-cp -r bigid-mcp-server/* "$PACKAGE_DIR/"
+# Copy files to temporary directory, excluding dist and archive
+print_status "Copying files (excluding dist and archive directories)..."
+rsync -av --exclude='dist/' --exclude='archive/' bigid-mcp-server/ "$PACKAGE_DIR/"
 
 # Copy root-level files if they exist
 for file in README.md LICENSE CHANGELOG.md INSTALLATION_NOTE.txt; do
@@ -122,6 +121,7 @@ if [ ! -f "$PACKAGE_DIR/.npmignore" ]; then
 *.swp
 .DS_Store
 coverage/
+archive/
 .nyc_output/
 .env
 .env.*
@@ -164,7 +164,7 @@ print_status "Cleaning development artifacts..."
 cd "$PACKAGE_DIR"
 
 # Remove directories that should not be distributed
-# Note: We keep "dist" since we pre-build the TypeScript
+# Note: We keep "src" since users need to compile TypeScript themselves
 dirs_to_remove=(
     "node_modules"
     ".git"
@@ -178,7 +178,6 @@ dirs_to_remove=(
     "tests"
     "__tests__"
     ".tscache"
-    "src"
 )
 
 for dir in "${dirs_to_remove[@]}"; do
@@ -215,9 +214,9 @@ if [ -f "package.json" ]; then
     # Remove scripts that are only needed for development
     node -e "
         const pkg = require('./package.json');
-        // Keep only essential scripts (remove build since we pre-build)
+        // Keep essential scripts including build since users need to compile TypeScript
         if (pkg.scripts) {
-            const keepScripts = ['start'];
+            const keepScripts = ['start', 'build'];
             const newScripts = {};
             keepScripts.forEach(script => {
                 if (pkg.scripts[script]) {
@@ -226,8 +225,7 @@ if [ -f "package.json" ]; then
             });
             pkg.scripts = newScripts;
         }
-        // Remove devDependencies from the distributed package.json
-        delete pkg.devDependencies;
+        // Keep devDependencies since users need TypeScript to compile
         console.log(JSON.stringify(pkg, null, 2));
     " > package.json.tmp && mv package.json.tmp package.json
 fi
@@ -257,7 +255,7 @@ Size: $PACKAGE_SIZE
 Created: $(date)
 
 Contents:
-- BigID MCP Server source code
+- BigID MCP Server TypeScript source code
 - Installation and uninstall scripts
 - Configuration examples
 - Documentation
@@ -265,7 +263,9 @@ Contents:
 Installation:
 1. Extract: tar -xzf $TARBALL_NAME
 2. Enter directory: cd $PACKAGE_NAME
-3. Run: ./install.sh
+3. Install dependencies: npm install
+4. Build TypeScript: npm run build
+5. Run: ./install.sh
 
 WARNING: If you don't have node or Homebrew installed, the installer will request sudo. If you don't want to grant sudo, install Homebrew first (https://brew.sh)
 EOF
@@ -281,4 +281,6 @@ echo
 echo "To install from this package:"
 echo "  tar -xzf $TARBALL_NAME"
 echo "  cd $PACKAGE_NAME"
+echo "  npm install"
+echo "  npm run build"
 echo "  ./install.sh"
