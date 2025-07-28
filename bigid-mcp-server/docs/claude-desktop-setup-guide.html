@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Claude Desktop Setup Guide - BigID MCP Server</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f8f9fa;
+        }
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #2c3e50;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+            margin-bottom: 30px;
+        }
+        h2 {
+            color: #34495e;
+            margin-top: 40px;
+            margin-bottom: 20px;
+            padding-left: 15px;
+            border-left: 4px solid #3498db;
+        }
+        h3 {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+        }
+        .step {
+            background: #f8f9fa;
+            border-left: 4px solid #27ae60;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        .step-number {
+            background: #27ae60;
+            color: white;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+        .image-container {
+            text-align: center;
+            margin: 20px 0;
+        }
+        .image-container img {
+            max-width: 100%;
+            height: auto;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .image-caption {
+            font-style: italic;
+            color: #666;
+            margin-top: 10px;
+            font-size: 0.9em;
+        }
+        .warning {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-left: 4px solid #f39c12;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        .info {
+            background: #d1ecf1;
+            border: 1px solid #bee5eb;
+            border-left: 4px solid #17a2b8;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        .download-btn {
+            display: inline-block;
+            background: #3498db;
+            color: white;
+            padding: 12px 24px;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: bold;
+            margin: 10px 0;
+            transition: background-color 0.3s;
+        }
+        .download-btn:hover {
+            background: #2980b9;
+        }
+        .code-block {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 15px;
+            border-radius: 6px;
+            font-family: 'Courier New', monospace;
+            overflow-x: auto;
+            margin: 15px 0;
+            white-space: pre;
+            word-wrap: break-word;
+        }
+        .highlight {
+            background: #fff3cd;
+            padding: 2px 4px;
+            border-radius: 3px;
+        }
+        ul {
+            padding-left: 20px;
+        }
+        li {
+            margin: 8px 0;
+        }
+        .prerequisites {
+            background: #e8f5e8;
+            border: 1px solid #c3e6c3;
+            border-left: 4px solid #27ae60;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        .note {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-left: 4px solid #6c757d;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        .tool-category {
+            margin: 20px 0;
+        }
+        .tool-item {
+            background: #f8f9fa;
+            border-left: 3px solid #3498db;
+            padding: 10px 15px;
+            margin: 8px 0;
+            border-radius: 0 5px 5px 0;
+        }
+        .tool-name {
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        .tool-description {
+            color: #666;
+            font-size: 0.9em;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 Claude Desktop Setup Guide for BigID MCP Server</h1>
+        
+        <div class="prerequisites">
+            <h3>📋 Prerequisites</h3>
+            <ul>
+                <li>macOS (tested on macOS 14.4+)</li>
+                <li>Node.js 18+ (will be installed if missing)</li>
+                <li>Homebrew (will be installed if missing)</li>
+                <li>BigID user token and domain</li>
+                <li>Chrome browser (for viewing this guide)</li>
+            </ul>
+        </div>
+
+        <div class="note">
+            <h3>📝 About This Installation</h3>
+            <p>The installation script will automatically handle dependencies and only request sudo permissions if both Node.js and Homebrew are missing. If you prefer to install Homebrew manually, you can do so at <a href="https://brew.sh" target="_blank">brew.sh</a>.</p>
+        </div>
+
+        <h2>📥 Step 1: Download and Install Claude Desktop</h2>
+        <div class="step">
+            <span class="step-number">1</span>
+            <strong>Download Claude Desktop</strong>
+            <p>First, you need to download and install Claude Desktop from the official Anthropic website:</p>
+            <a href="https://claude.ai/download" class="download-btn" target="_blank">Download Claude Desktop</a>
+            <p>Follow the installation instructions for macOS.</p>
+        </div>
+
+        <h2>⚙️ Step 2: Run the Installation Script</h2>
+        <div class="step">
+            <span class="step-number">2</span>
+            <strong>Execute the Installation Script</strong>
+            <p>Open a terminal in the <code>bigid-mcp-server-1.0.X</code> directory and run:</p>
+            <div class="code-block">./install.sh</div>
+            <p>This script will automatically:</p>
+            <ul>
+                <li>Check for and install Homebrew (if missing)</li>
+                <li>Check for and install Node.js 18+ (if missing)</li>
+                <li>Install all required npm dependencies</li>
+                <li>Create a Claude Desktop configuration template</li>
+                <li>Display this setup guide in Chrome</li>
+            </ul>
+            <div class="warning">
+                <strong>⚠️ Note:</strong> The script will only request sudo permissions if both Node.js and Homebrew are missing.
+            </div>
+        </div>
+
+        <h2>🔧 Step 3: Configure Claude Desktop</h2>
+        <div class="step">
+            <span class="step-number">3</span>
+            <strong>Open Claude Desktop Settings</strong>
+            <p>Launch Claude Desktop and follow these steps:</p>
+            <ol>
+                <li>Click <strong>Claude</strong> in the menu bar</li>
+                <li>Select <strong>Settings</strong></li>
+                <li>Navigate to the <strong>Developer</strong> tab</li>
+                <li>Click the <strong>Edit Config</strong> button</li>
+                <li>Edit the file in the text editor of your choice</li>
+            </ol>
+        </div>
+
+        <div class="step">
+            <span class="step-number">4</span>
+            <strong>Add MCP Server Configuration</strong>
+            <p>In the configuration editor, add the following MCP server configuration:</p>
+            
+            <div class="info">
+                <strong>💡 Tip:</strong> The install script creates a pre-configured <code>claude-desktop-config.json</code> file with the correct path to the MCP server already set. You can use that file as a template instead of manually adding it to the configuration below. You still need to copy it into the actual Claude config file.
+            </div>
+            
+            <div class="code-block">{
+  "mcpServers": {
+    "bigid-mcp-server": {
+      "command": "node",
+      "args": [
+        "/path/to/bigid-mcp-server/dist/server.js"
+      ],
+      "env": {
+        "BIGID_USER_TOKEN": "your-actual-user-token-here",
+        "BIGID_DOMAIN": "your-bigid-domain.com",
+        "BIGID_AUTH_TYPE": "user_token",
+        "BIGID_TIMEOUT": "30000",
+        "BIGID_RETRY_ATTEMPTS": "3",
+        "NODE_ENV": "production",
+        "BIGID_MCP_LOG_LEVEL": "info"
+      },
+      "description": "BigID data discovery, catalog, and security monitoring"
+    }
+  }
+}</div>
+            <div class="warning">
+                <strong>⚠️ Important:</strong> Replace the following values:
+                <ul>
+                    <li><code>/path/to/bigid-mcp-server</code> with the actual path to your installation</li>
+                    <li><code>your-actual-user-token-here</code> with your BigID user token</li>
+                    <li><code>your-bigid-domain.com</code> with your BigID server domain</li>
+                </ul>
+            </div>
+            
+            <div class="info">
+                <h3>🔐 Need Help Getting Your BigID User Token?</h3>
+                <p>If you don't have your BigID user token, you can get one using Chrome DevTools:</p>
+                
+                <h4>Get Token from Authorization Header</h4>
+                <ol>
+                    <li><strong>Go to Your BigID Instance:</strong> Visit your BigID domain (e.g., <a href="https://sandbox.bigiddemo.com">BigID Sandbox Environment</a>)</li>
+                    <li><strong>Sign In:</strong> Use your Okta credentials to authenticate</li>
+                    <li><strong>Open Chrome DevTools:</strong> Press <code>F12</code> or <code>Cmd+Option+I</code> (Mac), or right-click anywhere on the page and select "Inspect"</li>
+                    <li><strong>Go to Network Tab:</strong> Click on the "Network" tab in DevTools</li>
+                    <li><strong>Refresh the Page:</strong> Press <code>F5</code> or <code>Cmd+R</code> to refresh</li>
+                    <li><strong>Find API Requests:</strong> Look for requests to your BigID domain in the network list</li>
+                    <li><strong>Check Authorization Header:</strong> Click on any request, then look in the "Request Headers" section for "Authorization"</li>
+                    <li><strong>Copy the Token:</strong> Copy the entire Authorization header value</li>
+                </ol>
+
+                <div class="warning">
+                    <h4>⚠️ Important Notes</h4>
+                    <ul>
+                        <li><strong>Token Expiry:</strong> These tokens typically expire and need to be replaced periodically</li>
+                        <li><strong>Domain-Specific:</strong> BigID tokens are NOT cross-domain. You must use a different token for each BigID domain/instance</li>
+                        <li><strong>Security:</strong> Keep your tokens secure and don't share them</li>
+                        <li><strong>Demo Site:</strong> The sandbox demo is perfect for testing the setup</li>
+                        <li><strong>Restart Claude Desktop:</strong> Always restart Claude Desktop after changing the config</li>
+                    </ul>
+                </div>
+
+                <h4>📝 How to Use Your Token</h4>
+                <ol>
+                    <li><strong>Copy the Token:</strong> Select and copy the entire Authorization header value</li>
+                    <li><strong>Update Configuration:</strong> In your Claude Desktop MCP config, replace the placeholder with your token</li>
+                    <li><strong>Test:</strong> Restart Claude Desktop and ask Claude to use the BigID MCP server</li>
+                </ol>
+            </div>
+        </div>
+
+        <div class="image-container">
+            <img src="example-claude-mcp-config.png" alt="Example Claude MCP Configuration">
+            <div class="image-caption">Example MCP server configuration in Claude Desktop</div>
+        </div>
+
+        <h2>📚 Step 4: Start Using BigID with Claude</h2>
+        <div class="step">
+            <span class="step-number">5</span>
+            <strong>Start a New Chat</strong>
+            <p>Create a new chat in Claude Desktop to begin using the BigID MCP server.</p>
+        </div>
+
+
+
+        <h2>🎯 Step 5: Begin Your BigID Queries</h2>
+        <div class="step">
+            <span class="step-number">6</span>
+            <strong>Ask Claude About Your BigID Data</strong>
+            <p>Now you can ask Claude questions about your BigID data! Claude has access to all the BigID tools and can help you explore your data catalog, security posture, and more.</p>
+            <div class="note">
+                <strong>💡 Note:</strong> There is a BigID filter spec resource that can be added to your chat. It is primarily used for constructing custom queries for catalog endpoints. For most use cases, you can simply ask Claude to use the BigID MCP server directly.
+            </div>
+        </div>
+
+        <div class="warning">
+            <h3>⚠️ CRITICAL SECURITY WARNING</h3>
+            <p><strong>Always validate MCP tool queries and results:</strong></p>
+            <ul>
+                <li><strong>Inspect Tool Queries:</strong> Always review the MCP tool queries that Claude generates before they are executed</li>
+                <li><strong>Validate Results:</strong> Cross-reference Claude's analysis against the raw data returned by the MCP tools</li>
+                <li><strong>Verify Accuracy:</strong> Don't rely solely on Claude's interpretation - check the underlying data yourself</li>
+                <li><strong>Review Permissions:</strong> Ensure the queries only access data you're authorized to view</li>
+            </ul>
+            <p><strong>Remember:</strong> Claude is an AI assistant that can make mistakes. Always validate both the queries being made and the conclusions drawn from the results.</p>
+        </div>
+
+        <h2>🔍 Available Tools</h2>
+        <div class="info">
+            <p>Claude has access to these BigID tools:</p>
+        </div>
+
+
+
+        <div class="tool-category">
+            <h3>📊 Inventory Tools</h3>
+            <div class="tool-item">
+                <div class="tool-name">get_inventory_aggregation</div>
+                <div class="tool-description">Get inventory aggregation data (consolidated tool for tags, sources, attributes, categories, etc.).</div>
+            </div>
+        </div>
+
+        <div class="tool-category">
+            <h3>🛡️ DSPM (Data Security Posture Management) Tools</h3>
+            <div class="tool-item">
+                <div class="tool-name">get_security_cases</div>
+                <div class="tool-description">Find security issues and compliance violations.</div>
+            </div>
+            <div class="tool-item">
+                <div class="tool-name">get_security_trends</div>
+                <div class="tool-description">Get security trends and analytics.</div>
+            </div>
+            <div class="tool-item">
+                <div class="tool-name">get_cases_group_by_policy</div>
+                <div class="tool-description">Get cases grouped by policy with optional filtering and pagination.</div>
+            </div>
+        </div>
+
+        <div class="tool-category">
+            <h3>📚 Catalog Tools</h3>
+            <div class="tool-item">
+                <div class="tool-name">get_catalog_objects</div>
+                <div class="tool-description">Comprehensive catalog search with advanced filtering.</div>
+            </div>
+            <div class="tool-item">
+                <div class="tool-name">get_object_details</div>
+                <div class="tool-description">Get details for a specific data asset.</div>
+            </div>
+            <div class="tool-item">
+                <div class="tool-name">get_catalog_tags</div>
+                <div class="tool-description">List all catalog tags.</div>
+            </div>
+            <div class="tool-item">
+                <div class="tool-name">get_catalog_rules</div>
+                <div class="tool-description">List catalog rules and policies.</div>
+            </div>
+            <div class="tool-item">
+                <div class="tool-name">get_catalog_count</div>
+                <div class="tool-description">Count catalog objects matching criteria.</div>
+            </div>
+        </div>
+
+        <div class="tool-category">
+            <h3>🔗 Lineage Tools</h3>
+            <div class="tool-item">
+                <div class="tool-name">get_lineage_tree</div>
+                <div class="tool-description">Get lineage tree for anchor collections.</div>
+            </div>
+        </div>
+
+        <div class="tool-category">
+            <h3>📋 Data Categories</h3>
+            <div class="tool-item">
+                <div class="tool-name">get_data_categories</div>
+                <div class="tool-description">List all data categories.</div>
+            </div>
+        </div>
+
+        <div class="tool-category">
+            <h3>🔒 Sensitivity Classification</h3>
+            <div class="tool-item">
+                <div class="tool-name">get_sensitivity_configs</div>
+                <div class="tool-description">List sensitivity classification groups.</div>
+            </div>
+            <div class="tool-item">
+                <div class="tool-name">get_sensitivity_config_by_id</div>
+                <div class="tool-description">Get sensitivity configuration by ID.</div>
+            </div>
+            <div class="tool-item">
+                <div class="tool-name">get_total_classification_ratios</div>
+                <div class="tool-description">Get ratio of classified to unclassified objects.</div>
+            </div>
+            <div class="tool-item">
+                <div class="tool-name">get_classification_ratio_by_name</div>
+                <div class="tool-description">Get classification ratio by group name.</div>
+            </div>
+            <div class="tool-item">
+                <div class="tool-name">get_classification_ratio_by_id</div>
+                <div class="tool-description">Get classification ratio by group ID.</div>
+            </div>
+        </div>
+
+        <div class="tool-category">
+            <h3>📜 Policies</h3>
+            <div class="tool-item">
+                <div class="tool-name">get_policies</div>
+                <div class="tool-description">List all compliance policies.</div>
+            </div>
+        </div>
+
+        <div class="tool-category">
+            <h3>📊 Dashboard Widget Tools</h3>
+            <div class="tool-item">
+                <div class="tool-name">get_dashboard_widget</div>
+                <div class="tool-description">Get dashboard widget data for compliance reporting and analytics (consolidated tool for frameworks, controls, policies, data source types).</div>
+            </div>
+        </div>
+
+        <div class="tool-category">
+            <h3>🔐 ACI (Access Control & Identity) Tools</h3>
+            <div class="tool-item">
+                <div class="tool-name">get_aci_data_manager</div>
+                <div class="tool-description">Get data manager items with optional filtering and pagination.</div>
+            </div>
+            <div class="tool-item">
+                <div class="tool-name">get_aci_data_manager_permissions</div>
+                <div class="tool-description">Get permissions for a specific data manager item.</div>
+            </div>
+            <div class="tool-item">
+                <div class="tool-name">get_aci_groups</div>
+                <div class="tool-description">Get groups with optional filtering and pagination.</div>
+            </div>
+            <div class="tool-item">
+                <div class="tool-name">get_aci_users</div>
+                <div class="tool-description">Get users with optional filtering and pagination.</div>
+            </div>
+        </div>
+
+        <div class="tool-category">
+            <h3>🌍 Location Tools</h3>
+            <div class="tool-item">
+                <div class="tool-name">get_locations</div>
+                <div class="tool-description">Get location data for applications, identities, or systems (consolidated tool for geographical distribution and deployment information).</div>
+            </div>
+        </div>
+
+        <div class="tool-category">
+            <h3>🔍 Metadata Search Tools</h3>
+            <div class="tool-item">
+                <div class="tool-name">metadata_quick_search</div>
+                <div class="tool-description">Quick search across metadata with basic filtering.</div>
+            </div>
+            <div class="tool-item">
+                <div class="tool-name">metadata_full_search</div>
+                <div class="tool-description">Comprehensive metadata search with advanced filtering options.</div>
+            </div>
+            <div class="tool-item">
+                <div class="tool-name">metadata_objects_search</div>
+                <div class="tool-description">Search for specific metadata objects with detailed criteria.</div>
+            </div>
+            <div class="tool-item">
+                <div class="tool-name">metadata_objects_count</div>
+                <div class="tool-description">Count metadata objects matching search criteria.</div>
+            </div>
+        </div>
+
+        <div class="tool-category">
+            <h3>🔧 System Tools</h3>
+            <div class="tool-item">
+                <div class="tool-name">get_health_check</div>
+                <div class="tool-description">Get elastic-search health status.</div>
+            </div>
+        </div>
+
+        <h2>🚨 Troubleshooting</h2>
+        <div class="warning">
+            <h3>Common Issues and Solutions</h3>
+            <ul>
+                <li><strong>MCP Server Not Starting:</strong> Check that Node.js is installed and the server path is correct</li>
+                <li><strong>Authentication Errors:</strong> Verify your BigID user token in the configuration</li>
+                <li><strong>Bad Tool Queries:</strong> Ensure the BigID resource is added to each new chat</li>
+                <li><strong>Connection Issues:</strong> Check your network connection and BigID server accessibility</li>
+                <li><strong>Token Expired:</strong> Replace your user token if it has expired</li>
+            </ul>
+        </div>
+
+        <div class="step">
+            <span class="step-number">✅</span>
+            <strong>You're All Set!</strong>
+            <p>Congratulations! You've successfully set up Claude Desktop with the BigID MCP server. You can now use Claude to interact with your BigID data.</p>
+        </div>
+    </div>
+
+    
+</body>
+</html>

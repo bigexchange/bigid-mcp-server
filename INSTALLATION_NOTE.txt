@@ -1,0 +1,33 @@
+BigID MCP Server - Installation Instructions
+============================================
+
+PACKAGE: bigid-mcp-server-package.tar.gz (162KB)
+
+QUICK INSTALLATION:
+1. Extract the package to your home directory:
+   tar -xzf bigid-mcp-server-package.tar.gz
+
+2. Navigate to the extracted directory:
+   cd bigid-mcp-server
+
+3. Run the automated installation script:
+   ./install.sh
+
+4. Follow the on-screen instructions to configure Claude Desktop
+
+WHAT'S INCLUDED:
+- Complete BigID MCP Server with 15 API tools
+- Automated macOS installation script
+- Claude Desktop configuration template
+- Comprehensive documentation
+
+RECOMMENDED LOCATION:
+Extract to: ~/bigid-mcp-server
+This keeps it organized in your home directory and matches the default paths in the configuration.
+
+REQUIREMENTS:
+- macOS with Homebrew (will be installed if missing)
+- Node.js 18+ (will be installed if missing)
+- BigID user token and domain
+
+The installation script will handle all dependencies and create the necessary configuration files. 
