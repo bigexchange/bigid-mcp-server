@@ -12,6 +12,51 @@ export class ACITools {
   }
 
   /**
+   * Validate and clean sort parameter
+   */
+  private validateSortParameter(sort?: string): string | undefined {
+    if (!sort || sort.trim() === '') {
+      return undefined;
+    }
+    
+    // Handle URL-encoded JSON sort parameters
+    try {
+      // If it looks like URL-encoded JSON, decode it
+      if (sort.includes('%')) {
+        const decoded = decodeURIComponent(sort);
+        // Validate it's valid JSON
+        JSON.parse(decoded);
+        return decoded;
+      }
+      
+      // If it's already JSON, validate it
+      if (sort.startsWith('[') || sort.startsWith('{')) {
+        JSON.parse(sort);
+        return sort;
+      }
+      
+      // If it's a simple string, return as is
+      return sort;
+    } catch (error) {
+      console.warn('Invalid sort parameter:', sort, 'using default sorting');
+      return undefined;
+    }
+  }
+
+  /**
+   * Clean empty parameters
+   */
+  private cleanParameters(params: any): any {
+    const cleaned: any = {};
+    for (const [key, value] of Object.entries(params)) {
+      if (value !== undefined && value !== null && value !== '') {
+        cleaned[key] = value;
+      }
+    }
+    return cleaned;
+  }
+
+  /**
    * Get data manager items with optional filtering and pagination
    */
   async getDataManager(params: {
@@ -22,15 +67,20 @@ export class ACITools {
     app_id?: string;
     skip?: number;
   } = {}) {
-    // Set defaults
-    const finalParams = {
+    // Set defaults and clean parameters
+    const finalParams = this.cleanParameters({
       requireTotalCount: true,
       skip: 0,
       limit: 10,
       ...params
-    };
+    });
     
-              const cacheKey = this.cache.createDomainKey(this.aciClient.getDomain(), `aci_data_manager_${JSON.stringify(finalParams)}`);
+    // Validate sort parameter
+    if (finalParams.sort) {
+      finalParams.sort = this.validateSortParameter(finalParams.sort);
+    }
+    
+    const cacheKey = this.cache.createDomainKey(this.aciClient.getDomain(), `aci_data_manager_${JSON.stringify(finalParams)}`);
     
     try {
       const cached = await this.cache.get(cacheKey);
@@ -57,13 +107,21 @@ export class ACITools {
     limit?: number;
     requireTotalCount?: boolean;
   }) {
-    // Set defaults
-    const finalParams = {
+    // Validate required parameter
+    if (!params.itemPath) {
+      return { 
+        success: false, 
+        error: 'itemPath parameter is required for get_aci_data_manager_permissions' 
+      };
+    }
+    
+    // Set defaults and clean parameters
+    const finalParams = this.cleanParameters({
       requireTotalCount: true,
       skip: 0,
       limit: 10,
       ...params
-    };
+    });
     
     const cacheKey = `aci_data_manager_permissions_${params.itemPath}_${JSON.stringify(finalParams)}`;
     
@@ -92,13 +150,18 @@ export class ACITools {
     requireTotalCount?: boolean;
     sort?: string;
   } = {}) {
-    // Set defaults
-    const finalParams = {
+    // Set defaults and clean parameters
+    const finalParams = this.cleanParameters({
       requireTotalCount: true,
       skip: 0,
       limit: 10,
       ...params
-    };
+    });
+    
+    // Validate sort parameter
+    if (finalParams.sort) {
+      finalParams.sort = this.validateSortParameter(finalParams.sort);
+    }
     
     const cacheKey = `aci_groups_${JSON.stringify(finalParams)}`;
     
@@ -126,13 +189,18 @@ export class ACITools {
     requireTotalCount?: boolean;
     sort?: string;
   } = {}) {
-    // Set defaults
-    const finalParams = {
+    // Set defaults and clean parameters
+    const finalParams = this.cleanParameters({
       requireTotalCount: true,
       skip: 0,
       limit: 10,
       ...params
-    };
+    });
+    
+    // Validate sort parameter
+    if (finalParams.sort) {
+      finalParams.sort = this.validateSortParameter(finalParams.sort);
+    }
     
     const cacheKey = `aci_users_${JSON.stringify(finalParams)}`;
     

@@ -4,10 +4,33 @@ export const aciUsersSchema = {
   inputSchema: {
     type: 'object',
     properties: {
-      skip: { type: 'number', description: 'Number of users to skip' },
-      limit: { type: 'number', description: 'Number of users to return' },
-      requireTotalCount: { type: 'boolean', description: 'Whether to include total count in response' },
-      sort: { type: 'string', description: 'Sort criteria' }
+      skip: { 
+        type: 'number', 
+        description: 'Number of users to skip for pagination',
+        default: 0,
+        minimum: 0
+      },
+      limit: { 
+        type: 'number', 
+        description: 'Number of users to return (max 100)',
+        default: 10,
+        minimum: 1,
+        maximum: 100
+      },
+      requireTotalCount: { 
+        type: 'boolean', 
+        description: 'Whether to include total count in response',
+        default: true
+      },
+      sort: { 
+        type: 'string', 
+        description: 'Sort criteria. Supports multiple formats: simple field name, JSON array, or URL-encoded JSON',
+        examples: [
+          'sharedObjectsCount',
+          '[{"field":"sharedObjectsCount","order":"desc"}]',
+          '[{"field":"sharedObjectsCount","order":"desc"}]'
+        ]
+      }
     }
   },
   outputSchema: {
@@ -19,6 +42,8 @@ export const aciUsersSchema = {
       data: {
         type: 'object',
         properties: {
+          status: { type: 'string' },
+          statusCode: { type: 'number' },
           data: {
             type: 'object',
             properties: {
@@ -27,31 +52,24 @@ export const aciUsersSchema = {
                 items: {
                   type: 'object',
                   properties: {
-                    email: {
-                      type: 'string',
-                      description: 'User email address'
-                    },
-                    sharedObjectsCount: {
-                      type: 'number',
-                      description: 'Objects accessible to user'
-                    },
-                    external: {
-                      type: 'boolean',
-                      description: 'Whether user is external to organization'
-                    },
-                    dataSource: {
-                      type: 'string',
-                      description: 'Source system'
-                    }
+                    _id: { type: 'string' },
+                    email: { type: 'string' },
+                    username: { type: 'string' },
+                    name: { type: 'string' },
+                    dataSource: { type: 'string' },
+                    external: { type: 'boolean' },
+                    headless: { type: 'boolean' },
+                    sharedObjectsCount: { type: 'number' },
+                    createdAt: { type: 'string' },
+                    modifiedAt: { type: 'string' }
                   }
                 }
               },
-              totalCount: {
-                type: 'number',
-                description: 'Total users in system'
-              }
+              totalCount: { type: 'number' },
+              offset: { type: 'number' }
             }
-          }
+          },
+          message: { type: 'string', nullable: true }
         }
       }
     }

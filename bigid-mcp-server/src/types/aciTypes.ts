@@ -1,3 +1,5 @@
+import { StructuredFilter } from './filterTypes';
+
 export interface ACIDataManagerItem {
   _id: string;
   dataSource: string;
@@ -75,6 +77,7 @@ export interface ACIDataManagerParams {
   grouping?: string;
   app_id?: string;
   skip?: number;
+  filter?: StructuredFilter;
 }
 
 export interface ACIGroupsParams {
