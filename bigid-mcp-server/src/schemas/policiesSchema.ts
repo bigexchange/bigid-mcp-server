@@ -17,34 +17,57 @@ export const policiesSchema = {
         items: {
           type: 'object',
           properties: {
+            ruleId: {
+              type: 'string',
+              description: 'Policy rule ID'
+            },
             name: {
               type: 'string',
               description: 'Policy name'
             },
-            status: {
-              type: 'string',
-              description: 'Status: VIOLATED, UNVIOLATED'
-            },
-            findings: {
-              type: 'object',
-              properties: {
-                findingsAmt: {
-                  type: 'number',
-                  description: 'Number of violations found'
-                },
-                violated: {
-                  type: 'boolean',
-                  description: 'Whether policy is currently violated'
-                }
-              }
-            },
-            severity: {
-              type: 'string',
-              description: 'Policy severity level'
-            },
             description: {
               type: 'string',
               description: 'Policy description'
+            },
+            type: {
+              type: 'string',
+              description: 'Policy type'
+            },
+            enabled: {
+              type: 'boolean',
+              description: 'Whether policy is enabled'
+            },
+            conditions: {
+              type: 'array',
+              description: 'Policy conditions',
+              items: {
+                type: 'object',
+                properties: {
+                  field: { type: 'string' },
+                  operator: { type: 'string' },
+                  value: { description: 'Condition value' },
+                  fieldType: { type: 'string' }
+                }
+              }
+            },
+            actions: {
+              type: 'array',
+              description: 'Policy actions',
+              items: {
+                type: 'object',
+                properties: {
+                  type: { type: 'string' },
+                  parameters: { type: 'object' }
+                }
+              }
+            },
+            created_at: {
+              type: 'string',
+              description: 'Creation timestamp'
+            },
+            updated_at: {
+              type: 'string',
+              description: 'Last update timestamp'
             }
           }
         }

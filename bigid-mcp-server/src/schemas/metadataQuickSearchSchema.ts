@@ -1,3 +1,5 @@
+import { errorSchema } from './sharedSchemas';
+
 export const metadataQuickSearchSchema = {
   name: 'metadata_quick_search',
   description: 'USE FOR DISCOVERY - Finding data by name/content, user interfaces, initial exploration. Returns results grouped by type with search highlighting. Performance: Fast, user-friendly. Use simple terms ("customer", "email") or wildcards ("*customer*"). Start with this for user-facing discovery.',
@@ -66,8 +68,7 @@ export const metadataQuickSearchSchema = {
               properties: {
                 type: {
                   type: 'string',
-                  enum: ['file', 'rdb', 'policy', 'actionable_insights_cases'],
-                  description: 'Entity type - file (documents), rdb (database), policy (rules), actionable_insights_cases (security incidents)'
+                  description: 'Entity type - can be file, rdb, policy, actionable_insights_cases, or other types returned by the API'
                 },
                 count: { 
                   type: 'integer', 
@@ -88,16 +89,33 @@ export const metadataQuickSearchSchema = {
                             name: { type: 'string', description: 'Field name' },
                             value: { description: 'Field value' },
                             highlightedValue: { 
-                              type: 'string', 
-                              description: 'Value with <em> tags around search matches' 
+                              oneOf: [
+                                { type: 'string' },
+                                { type: 'null' }
+                              ],
+                              description: 'Value with <em> tags around search matches (can be null if no highlighting)' 
                             },
-                            originalField: { type: 'string', description: 'Original field name' }
+                            originalField: { 
+                              oneOf: [
+                                { type: 'string' },
+                                { type: 'null' }
+                              ],
+                              description: 'Original field name (can be null for some fields)' 
+                            }
                           }
                         }
                       },
                       assets: { 
-                        type: 'object', 
-                        description: 'Detailed metadata and technical properties' 
+                        type: 'array',
+                        description: 'Detailed metadata and technical properties',
+                        items: {
+                          type: 'object',
+                          properties: {
+                            name: { type: 'string', description: 'Asset name' },
+                            value: { description: 'Asset value' }
+                          },
+                          additionalProperties: true
+                        }
                       },
                       type: { type: 'string', description: 'Entity type' },
                       id: { type: 'string', description: 'Unique identifier' }
@@ -109,7 +127,7 @@ export const metadataQuickSearchSchema = {
           }
         }
       },
-      error: { type: 'string' }
+      error: errorSchema
     }
   },
 }; 

@@ -1,3 +1,6 @@
+// Import shared schemas
+import { errorSchema, messageSchema, statusSchema, statusCodeSchema, successResponseSchema } from './sharedSchemas';
+
 // Import all tool schemas
 import { inventoryAggregationSchema } from './inventoryAggregationSchema';
 import { healthCheckSchema } from './healthCheckSchema';
@@ -27,6 +30,9 @@ import { metadataQuickSearchSchema } from './metadataQuickSearchSchema';
 import { metadataFullSearchSchema } from './metadataFullSearchSchema';
 import { metadataObjectsSearchSchema } from './metadataObjectsSearchSchema';
 import { metadataObjectsCountSchema } from './metadataObjectsCountSchema';
+
+// Re-export shared schemas
+export { errorSchema, messageSchema, statusSchema, statusCodeSchema, successResponseSchema } from './sharedSchemas';
 
 // Re-export all tool schemas
 export { inventoryAggregationSchema } from './inventoryAggregationSchema';

@@ -6,8 +6,7 @@ export const classificationRatioByNameSchema = {
     properties: {
       name: { 
         type: 'string', 
-        description: 'Name of the sensitivity classification group',
-        required: true
+        description: 'Name of the sensitivity classification group'
       },
     },
     required: ['name'],

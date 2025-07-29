@@ -99,7 +99,7 @@ export const StructuredFilterSchema = {
     
     // FILE SPECIFIC
     fileName: {
-      description: 'File name with regex support. Supports: wildcards (*.csv, file?.txt), simple regex (/.*\\.csv$/), and alternation (email|mail). LIMITATION: Parentheses in regex patterns (capturing groups, lookahead, lookbehind) are not supported by the BigID API and will cause errors.',
+      description: 'File name with simple regex support. Supports: simple regex patterns (/.*\\.csv$/), and alternation (email|mail). Does NOT support regex patterns with parentheses (capturing groups, lookahead, lookbehind) - these will cause API errors.',
       type: 'string'
     },
     

@@ -1,3 +1,5 @@
+import { errorSchema, messageSchema, statusSchema, statusCodeSchema } from './sharedSchemas';
+
 export const aciDataManagerPermissionsSchema = {
   name: 'get_aci_data_manager_permissions',
   description: 'Get detailed permissions for specific files/folders for granular permission analysis',
@@ -44,15 +46,8 @@ export const aciDataManagerPermissionsSchema = {
       data: {
         type: 'object',
         properties: {
-          status: {
-            type: 'string',
-            description: 'Response status',
-            enum: ['success', 'error']
-          },
-          statusCode: {
-            type: 'number',
-            description: 'HTTP status code'
-          },
+          status: statusSchema,
+          statusCode: statusCodeSchema,
           data: {
             type: 'object',
             properties: {
@@ -72,14 +67,14 @@ export const aciDataManagerPermissionsSchema = {
                     },
                     email: {
                       type: 'string',
-                      description: 'Email address or URL of the permission holder'
+                      description: 'Email address or URL of the permission holder',
+                      nullable: true
                     },
                     access: {
                       type: 'array',
                       description: 'Array of access permissions granted',
                       items: {
-                        type: 'string',
-                        enum: ['READ', 'WRITE', 'DELETE', 'ADMIN', 'FULL_CONTROL']
+                        type: 'string'
                       }
                     },
                     type: {
@@ -88,9 +83,11 @@ export const aciDataManagerPermissionsSchema = {
                       enum: ['user', 'group', 'link', 'role', 'service']
                     },
                     subType: {
-                      type: 'string',
+                      oneOf: [
+                        { type: 'string' },
+                        { type: 'null' }
+                      ],
                       description: 'Subtype of the permission holder (e.g., EMAIL, DOMAIN)',
-                      nullable: true
                     },
                     grantType: {
                       type: 'string',
@@ -108,14 +105,11 @@ export const aciDataManagerPermissionsSchema = {
             },
             required: ['permissions', 'totalCount']
           },
-          message: {
-            type: 'string',
-            description: 'Response message',
-            nullable: true
-          }
+          message: messageSchema
         },
         required: ['status', 'statusCode', 'data']
-      }
+      },
+      error: errorSchema
     },
     required: ['success', 'data']
   }

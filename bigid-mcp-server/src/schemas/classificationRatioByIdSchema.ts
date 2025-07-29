@@ -6,8 +6,7 @@ export const classificationRatioByIdSchema = {
     properties: {
       id: { 
         type: 'string', 
-        description: 'ID of the sensitivity classification group',
-        required: true
+        description: 'ID of the sensitivity classification group'
       },
     },
     required: ['id'],

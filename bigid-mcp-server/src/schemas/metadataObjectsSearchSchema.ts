@@ -1,3 +1,5 @@
+import { errorSchema } from './sharedSchemas';
+
 export const metadataObjectsSearchSchema = {
   name: 'metadata_objects_search',
   description: 'Search for objects in the data explorer',
@@ -36,15 +38,32 @@ export const metadataObjectsSearchSchema = {
                 data: {
                   type: 'object',
                   description: 'Object data varies by entity type but includes core identification fields',
+                  additionalProperties: true,
                   properties: {
+                    severityLevel: { type: 'number', description: 'Severity level for actionable insights cases' },
+                    dataSourceName: { type: 'string', description: 'Data source display name' },
+                    dataSourceType: { type: 'string', description: 'Data source type' },
+                    policyName: { type: 'string', description: 'Policy name' },
+                    policyFqdn: { type: 'string', description: 'Policy fully qualified domain name' },
+                    updated_at: { type: 'object', description: 'Last update timestamp object' },
+                    controlFqdn: { type: 'string', description: 'Control fully qualified domain name' },
+                    controlName: { type: 'string', description: 'Control name' },
+                    categoryName: { type: 'string', description: 'Category name' },
+                    description: { type: 'string', description: 'Description' },
+                    frameworkName: { type: 'string', description: 'Framework name' },
+                    // Legacy fields that may still be present
                     fullyQualifiedName: { type: 'string', description: 'Unique object path identifier' },
                     fileName: { type: 'string', description: 'File or object name' },
                     source: { type: 'string', description: 'Data source system' },
-                    dataSourceName: { type: 'string', description: 'Data source display name' },
                     tags: { type: 'array', description: 'Classification and metadata tags' },
                     category: { type: 'array', description: 'Data categories and classifications' },
-                    updated_at: { type: 'object', description: 'Last update timestamp object' },
-                    sizeInBytes: { type: 'number', description: 'Object size in bytes' },
+                    sizeInBytes: { 
+                      oneOf: [
+                        { type: 'number' },
+                        { type: 'string' }
+                      ],
+                      description: 'Object size in bytes (can be number or string from API)' 
+                    },
                     scanDate: { type: 'string', description: 'Last scan timestamp' }
                   }
                 }
@@ -60,10 +79,11 @@ export const metadataObjectsSearchSchema = {
                 description: 'Key for retrieving next page of results'
               }
             }
-          }
+          },
+          error: errorSchema
         }
       },
-      error: { type: 'string' }
+      error: errorSchema
     }
   },
 }; 

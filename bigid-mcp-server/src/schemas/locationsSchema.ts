@@ -27,7 +27,7 @@ export const locationsSchema = {
             items: {
               type: 'object',
               properties: {
-                id: {
+                _id: {
                   type: 'string',
                   description: 'Location identifier'
                 },

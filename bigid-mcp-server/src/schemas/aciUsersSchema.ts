@@ -1,3 +1,5 @@
+import { errorSchema, messageSchema, statusSchema, statusCodeSchema } from './sharedSchemas';
+
 export const aciUsersSchema = {
   name: 'get_aci_users',
   description: 'Get user accounts and their shared object counts for user access analysis',
@@ -42,8 +44,8 @@ export const aciUsersSchema = {
       data: {
         type: 'object',
         properties: {
-          status: { type: 'string' },
-          statusCode: { type: 'number' },
+          status: statusSchema,
+          statusCode: statusCodeSchema,
           data: {
             type: 'object',
             properties: {
@@ -69,9 +71,10 @@ export const aciUsersSchema = {
               offset: { type: 'number' }
             }
           },
-          message: { type: 'string', nullable: true }
+          message: messageSchema
         }
-      }
+      },
+      error: errorSchema
     }
   }
 }; 

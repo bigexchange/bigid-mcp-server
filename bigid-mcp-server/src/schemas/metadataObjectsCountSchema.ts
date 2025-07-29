@@ -1,3 +1,5 @@
+import { errorSchema } from './sharedSchemas';
+
 export const metadataObjectsCountSchema = {
   name: 'metadata_objects_count',
   description: 'Count objects in the data explorer',
@@ -22,7 +24,7 @@ export const metadataObjectsCountSchema = {
           }
         }
       },
-      error: { type: 'string' }
+      error: errorSchema
     }
   },
 }; 

@@ -1,3 +1,5 @@
+import { errorSchema } from './sharedSchemas';
+
 export const metadataFullSearchSchema = {
   name: 'metadata_full_search',
   description: 'USE FOR ADVANCED SEARCH - Advanced metadata search with comprehensive filtering, sorting, and pagination. Supports 40+ field filters, 16 sortable fields, and wildcard text search. Returns complete object metadata. Best for complex queries and detailed analysis.',
@@ -196,8 +198,16 @@ export const metadataFullSearchSchema = {
                   }
                 },
                 assets: { 
-                  type: 'object', 
-                  description: 'Complete metadata and technical properties' 
+                  type: 'array',
+                  description: 'Complete metadata and technical properties',
+                  items: {
+                    type: 'object',
+                    properties: {
+                      name: { type: 'string', description: 'Asset name' },
+                      value: { description: 'Asset value' }
+                    },
+                    additionalProperties: true
+                  }
                 },
                 type: {
                   type: 'string',
@@ -210,7 +220,7 @@ export const metadataFullSearchSchema = {
           }
         }
       },
-      error: { type: 'string' }
+      error: errorSchema
     }
   },
 }; 

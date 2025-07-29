@@ -1,5 +1,7 @@
 import { StructuredFilterSchema } from '../types/filterTypes';
 
+import { errorSchema, messageSchema, statusSchema, statusCodeSchema } from './sharedSchemas';
+
 export const aciDataManagerSchema = {
   name: 'get_aci_data_manager',
   description: 'Get access control data across data sources for cross-system access analysis',
@@ -40,14 +42,8 @@ export const aciDataManagerSchema = {
       data: {
         type: 'object',
         properties: {
-          status: { 
-            type: 'string',
-            description: 'Response status (success/error)'
-          },
-          statusCode: { 
-            type: 'number',
-            description: 'HTTP status code'
-          },
+          status: statusSchema,
+          statusCode: statusCodeSchema,
           data: {
             type: 'array',
             description: 'Array of data manager items',
@@ -110,7 +106,12 @@ export const aciDataManagerSchema = {
                     modified_date: { type: 'string' },
                     objectName: { type: 'string' },
                     scannerType: { type: 'string' },
-                    sizeInBytes: { type: 'number' },
+                    sizeInBytes: { 
+                      oneOf: [
+                        { type: 'number' },
+                        { type: 'string' }
+                      ]
+                    },
                     type: { type: 'string' },
                     scan_status: { type: 'string' },
                     scannerTypeGroup: { type: 'string' }
@@ -119,13 +120,10 @@ export const aciDataManagerSchema = {
               }
             }
           },
-          message: { 
-            type: 'string', 
-            nullable: true,
-            description: 'Response message'
-          }
+          message: messageSchema
         }
-      }
+      },
+      error: errorSchema
     }
   }
 }; 

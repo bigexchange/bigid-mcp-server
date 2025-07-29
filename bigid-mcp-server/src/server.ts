@@ -354,17 +354,19 @@ class BigIDMCPServer {
       
       try {
         const result = await this.executeTool(name, args);
-        return { content: [{ type: 'text', text: JSON.stringify(result) }] };
+        return { 
+          content: [{ type: 'text', text: JSON.stringify(result, null, 2) }],
+          structuredContent: result 
+        };
       } catch (error) {
         logger.error(`Tool execution failed for ${name}:`, error);
+        const errorResult = {
+          success: false, 
+          error: error instanceof Error ? error.message : 'Tool execution failed' 
+        };
         return { 
-          content: [{ 
-            type: 'text', 
-            text: JSON.stringify({ 
-              success: false, 
-              error: error instanceof Error ? error.message : 'Tool execution failed' 
-            }) 
-          }] 
+          content: [{ type: 'text', text: JSON.stringify(errorResult, null, 2) }],
+          structuredContent: errorResult
         };
       }
     });

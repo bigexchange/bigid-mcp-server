@@ -1,3 +1,5 @@
+import { errorSchema, messageSchema, statusSchema, statusCodeSchema } from './sharedSchemas';
+
 export const aciGroupsSchema = {
   name: 'get_aci_groups',
   description: 'Get user groups and memberships for group-based access analysis and role management',
@@ -43,14 +45,8 @@ export const aciGroupsSchema = {
       data: {
         type: 'object',
         properties: {
-          status: { 
-            type: 'string',
-            description: 'Response status (success/error)'
-          },
-          statusCode: { 
-            type: 'number',
-            description: 'HTTP status code'
-          },
+          status: statusSchema,
+          statusCode: statusCodeSchema,
           data: {
             type: 'object',
             properties: {
@@ -117,13 +113,10 @@ export const aciGroupsSchema = {
               }
             }
           },
-          message: { 
-            type: 'string', 
-            nullable: true,
-            description: 'Response message'
-          }
+          message: messageSchema
         }
-      }
+      },
+      error: errorSchema
     }
   }
 }; 

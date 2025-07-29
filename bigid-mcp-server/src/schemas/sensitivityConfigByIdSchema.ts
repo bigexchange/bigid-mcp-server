@@ -6,8 +6,7 @@ export const sensitivityConfigByIdSchema = {
     properties: {
       id: { 
         type: 'string', 
-        description: 'ID of the sensitivity configuration to retrieve',
-        required: true
+        description: 'ID of the sensitivity configuration to retrieve'
       },
     },
     required: ['id'],

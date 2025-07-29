@@ -105,8 +105,11 @@ export const catalogObjectsSchema = {
                   description: 'Access level - "Yes" means publicly accessible (critical security risk)'
                 },
                 sizeInBytes: {
-                  type: 'number',
-                  description: 'Object size in bytes'
+                  oneOf: [
+                    { type: 'number' },
+                    { type: 'string' }
+                  ],
+                  description: 'Object size in bytes (can be number or string from API)'
                 },
                 scanStatus: {
                   type: 'string',

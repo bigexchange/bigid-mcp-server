@@ -1,6 +1,6 @@
 {
   "name": "bigid-mcp-server",
-  "version": "1.0.9",
+  "version": "1.0.11",
   "description": "",
   "main": "index.js",
   "directories": {
@@ -47,6 +47,8 @@
   "devDependencies": {
     "@types/jest": "^30.0.0",
     "@types/node": "^24.0.15",
+    "ajv": "^8.17.1",
+    "ajv-formats": "^3.0.1",
     "jest": "^30.0.4",
     "nodemon": "^3.1.10",
     "ts-jest": "^29.4.0"
