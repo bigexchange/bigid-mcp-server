@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Claude Desktop Setup Guide - BigID MCP Server</title>
+    <title>MCP Server Setup Guide - BigID MCP Server</title>
     <style>
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
@@ -161,11 +161,53 @@
             font-size: 0.9em;
             margin-top: 5px;
         }
+        .client-section {
+            background: #f0f8ff;
+            border: 1px solid #b3d9ff;
+            border-left: 4px solid #0066cc;
+            padding: 20px;
+            margin: 30px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        details {
+            margin: 20px 0;
+        }
+        
+        details summary {
+            cursor: pointer;
+            padding: 15px;
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            margin-bottom: 0;
+            transition: background-color 0.3s;
+        }
+        
+        details summary:hover {
+            background: #e9ecef;
+        }
+        
+        details summary h3 {
+            margin: 0;
+            color: #2c3e50;
+        }
+        
+        details[open] summary {
+            border-bottom-left-radius: 0;
+            border-bottom-right-radius: 0;
+            border-bottom: none;
+        }
+        
+        details .step {
+            margin-top: 0;
+            border-radius: 0 0 8px 8px;
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>🚀 Claude Desktop Setup Guide for BigID MCP Server</h1>
+        <h1>🚀 MCP Server Setup Guide for BigID MCP Server</h1>
         
         <div class="prerequisites">
             <h3>📋 Prerequisites</h3>
@@ -175,6 +217,7 @@
                 <li>Homebrew (will be installed if missing)</li>
                 <li>BigID user token and domain</li>
                 <li>Chrome browser (for viewing this guide)</li>
+                <li>MCP-compatible client (Claude Desktop, Gemini CLI, etc.)</li>
             </ul>
         </div>
 
@@ -183,18 +226,9 @@
             <p>The installation script will automatically handle dependencies and only request sudo permissions if both Node.js and Homebrew are missing. If you prefer to install Homebrew manually, you can do so at <a href="https://brew.sh" target="_blank">brew.sh</a>.</p>
         </div>
 
-        <h2>📥 Step 1: Download and Install Claude Desktop</h2>
+        <h2>⚙️ Step 1: Run the Installation Script</h2>
         <div class="step">
             <span class="step-number">1</span>
-            <strong>Download Claude Desktop</strong>
-            <p>First, you need to download and install Claude Desktop from the official Anthropic website:</p>
-            <a href="https://claude.ai/download" class="download-btn" target="_blank">Download Claude Desktop</a>
-            <p>Follow the installation instructions for macOS.</p>
-        </div>
-
-        <h2>⚙️ Step 2: Run the Installation Script</h2>
-        <div class="step">
-            <span class="step-number">2</span>
             <strong>Execute the Installation Script</strong>
             <p>Open a terminal in the <code>bigid-mcp-server-1.0.X</code> directory and run:</p>
             <div class="code-block">./install.sh</div>
@@ -203,7 +237,8 @@
                 <li>Check for and install Homebrew (if missing)</li>
                 <li>Check for and install Node.js 18+ (if missing)</li>
                 <li>Install all required npm dependencies</li>
-                <li>Create a Claude Desktop configuration template</li>
+                <li>Create MCP client configuration templates</li>
+                <li>Set up Gemini CLI (if requested)</li>
                 <li>Display this setup guide in Chrome</li>
             </ul>
             <div class="warning">
@@ -211,32 +246,79 @@
             </div>
         </div>
 
-        <h2>🔧 Step 3: Configure Claude Desktop</h2>
-        <div class="step">
-            <span class="step-number">3</span>
-            <strong>Open Claude Desktop Settings</strong>
-            <p>Launch Claude Desktop and follow these steps:</p>
-            <ol>
-                <li>Click <strong>Claude</strong> in the menu bar</li>
-                <li>Select <strong>Settings</strong></li>
-                <li>Navigate to the <strong>Developer</strong> tab</li>
-                <li>Click the <strong>Edit Config</strong> button</li>
-                <li>Edit the file in the text editor of your choice</li>
-            </ol>
+        <h2>🔧 Step 2: Configure Your MCP Client</h2>
+
+        <div class="info">
+            <h3>📋 Choose Your MCP Client Setup</h3>
+            <p>Select the instructions for your preferred MCP client below:</p>
         </div>
 
+        <details class="client-section">
+            <summary><h3>🤖 Claude Desktop Setup</h3></summary>
+            <div class="step">
+                <span class="step-number">2a</span>
+                <strong>Download Claude Desktop</strong>
+                <p>First, download and install Claude Desktop from the official Anthropic website:</p>
+                <a href="https://claude.ai/download" class="download-btn" target="_blank">Download Claude Desktop</a>
+                <p>Follow the installation instructions for macOS.</p>
+            </div>
+
+            <div class="step">
+                <span class="step-number">2b</span>
+                <strong>Open Claude Desktop Settings</strong>
+                <p>Launch Claude Desktop and follow these steps:</p>
+                <ol>
+                    <li>Click <strong>Claude</strong> in the menu bar</li>
+                    <li>Select <strong>Settings</strong></li>
+                    <li>Navigate to the <strong>Developer</strong> tab</li>
+                    <li>Click the <strong>Edit Config</strong> button</li>
+                    <li>Edit the file in the text editor of your choice</li>
+                    <li>Add the MCP server configuration below</li>
+                </ol>
+            </div>
+        </details>
+
+        <details class="client-section">
+            <summary><h3>💎 Gemini CLI Setup</h3></summary>
+            <div class="step">
+                <span class="step-number">2a</span>
+                <strong>Install Gemini CLI</strong>
+                <p>The installation script will automatically check for and install Gemini CLI via Homebrew. If you prefer to install it manually:</p>
+                <div class="code-block">brew install gemini</div>
+                <p>Or download from: <a href="https://github.com/google-gemini/gemini-cli/" target="_blank">GitHub</a></p>
+            </div>
+
+            <div class="step">
+                <span class="step-number">2b</span>
+                <strong>Gemini Configuration</strong>
+                <p>The installation script can automatically create a Gemini configuration at <code>~/.gemini/settings.json</code> or you can create <code>.gemini/settings.json</code> in your working directory for local configuration.</p>
+            </div>
+
+            <div class="step">
+                <span class="step-number">2c</span>
+                <strong>Set Gemini API Key</strong>
+                <p>The installation script will help you set up your Gemini API key. If you need to do it manually:</p>
+                <ol>
+                    <li>Get a BigID Google API key</li>
+                    <li>Add to your shell config file (~/.zshrc or ~/.bashrc):</li>
+                </ol>
+                <div class="code-block">export GEMINI_API_KEY="your-api-key-here"</div>
+                <p>Then restart your terminal or run: <code>source ~/.zshrc</code> (or <code>~/.bashrc</code>)</p>
+            </div>
+        </details>
+
         <div class="step">
-            <span class="step-number">4</span>
+            <span class="step-number">3</span>
             <strong>Add MCP Server Configuration</strong>
-            <p>In the configuration editor, add the following MCP server configuration:</p>
+            <p>Add the following MCP server configuration to your client:</p>
             
             <div class="info">
-                <strong>💡 Tip:</strong> The install script creates a pre-configured <code>claude-desktop-config.json</code> file with the correct path to the MCP server already set. You can use that file as a template instead of manually adding it to the configuration below. You still need to copy it into the actual Claude config file.
+                <strong>💡 Tip:</strong> The install script creates a pre-configured <code>mcp-server-config.json</code> file with the correct path to the MCP server already set. You can use that file as a template instead of manually adding it to the configuration below.
             </div>
             
             <div class="code-block">{
   "mcpServers": {
-    "bigid-mcp-server": {
+    "bigid-mcp": {
       "command": "node",
       "args": [
         "/path/to/bigid-mcp-server/dist/server.js"
@@ -249,77 +331,131 @@
         "BIGID_RETRY_ATTEMPTS": "3",
         "NODE_ENV": "production",
         "BIGID_MCP_LOG_LEVEL": "info"
-      },
-      "description": "BigID data discovery, catalog, and security monitoring"
+      }
+      "timeout": 30000,
     }
   }
 }</div>
+        </div>
+
+        <div class="warning">
+            <h3>⚠️ Important Configuration Notes</h3>
+            <p>For both clients, replace the following values:</p>
+            <ul>
+                <li><code>/path/to/bigid-mcp-server</code> with the actual path to your installation</li>
+                <li><code>your-actual-user-token-here</code> or <code>user-token</code> with your BigID user token</li>
+                <li><code>your-bigid-domain.com</code> or <code>sandbox.bigiddemo.com</code> with your BigID server domain</li>
+            </ul>
+        </div>
+            
+        <div class="info">
+            <h3>🔐 Need Help Getting Your BigID User Token?</h3>
+            <p>If you don't have your BigID user token, you can get one using Chrome DevTools:</p>
+            
+            <h4>Get Token from Authorization Header</h4>
+            <ol>
+                <li><strong>Go to Your BigID Instance:</strong> Visit your BigID domain (e.g., <a href="https://sandbox.bigiddemo.com">BigID Sandbox Environment</a>)</li>
+                <li><strong>Sign In:</strong> Use your Okta credentials to authenticate</li>
+                <li><strong>Open Chrome DevTools:</strong> Press <code>F12</code> or <code>Cmd+Option+I</code> (Mac), or right-click anywhere on the page and select "Inspect"</li>
+                <li><strong>Go to Network Tab:</strong> Click on the "Network" tab in DevTools</li>
+                <li><strong>Refresh the Page:</strong> Press <code>F5</code> or <code>Cmd+R</code> to refresh</li>
+                <li><strong>Find API Requests:</strong> Look for requests to your BigID domain in the network list</li>
+                <li><strong>Check Authorization Header:</strong> Click on any request, then look in the "Request Headers" section for "Authorization"</li>
+                <li><strong>Copy the Token:</strong> Copy the entire Authorization header value</li>
+            </ol>
+
             <div class="warning">
-                <strong>⚠️ Important:</strong> Replace the following values:
+                <h4>⚠️ Important Notes</h4>
                 <ul>
-                    <li><code>/path/to/bigid-mcp-server</code> with the actual path to your installation</li>
-                    <li><code>your-actual-user-token-here</code> with your BigID user token</li>
-                    <li><code>your-bigid-domain.com</code> with your BigID server domain</li>
+                    <li><strong>Token Expiry:</strong> These tokens typically expire and need to be replaced periodically</li>
+                    <li><strong>Domain-Specific:</strong> BigID tokens are NOT cross-domain. You must use a different token for each BigID domain/instance</li>
+                    <li><strong>Security:</strong> Keep your tokens secure and don't share them</li>
+                    <li><strong>Demo Site:</strong> The sandbox demo is perfect for testing the setup</li>
+                    <li><strong>Restart Client:</strong> Always restart your MCP client after changing the config</li>
                 </ul>
             </div>
-            
-            <div class="info">
-                <h3>🔐 Need Help Getting Your BigID User Token?</h3>
-                <p>If you don't have your BigID user token, you can get one using Chrome DevTools:</p>
-                
-                <h4>Get Token from Authorization Header</h4>
-                <ol>
-                    <li><strong>Go to Your BigID Instance:</strong> Visit your BigID domain (e.g., <a href="https://sandbox.bigiddemo.com">BigID Sandbox Environment</a>)</li>
-                    <li><strong>Sign In:</strong> Use your Okta credentials to authenticate</li>
-                    <li><strong>Open Chrome DevTools:</strong> Press <code>F12</code> or <code>Cmd+Option+I</code> (Mac), or right-click anywhere on the page and select "Inspect"</li>
-                    <li><strong>Go to Network Tab:</strong> Click on the "Network" tab in DevTools</li>
-                    <li><strong>Refresh the Page:</strong> Press <code>F5</code> or <code>Cmd+R</code> to refresh</li>
-                    <li><strong>Find API Requests:</strong> Look for requests to your BigID domain in the network list</li>
-                    <li><strong>Check Authorization Header:</strong> Click on any request, then look in the "Request Headers" section for "Authorization"</li>
-                    <li><strong>Copy the Token:</strong> Copy the entire Authorization header value</li>
-                </ol>
 
-                <div class="warning">
-                    <h4>⚠️ Important Notes</h4>
-                    <ul>
-                        <li><strong>Token Expiry:</strong> These tokens typically expire and need to be replaced periodically</li>
-                        <li><strong>Domain-Specific:</strong> BigID tokens are NOT cross-domain. You must use a different token for each BigID domain/instance</li>
-                        <li><strong>Security:</strong> Keep your tokens secure and don't share them</li>
-                        <li><strong>Demo Site:</strong> The sandbox demo is perfect for testing the setup</li>
-                        <li><strong>Restart Claude Desktop:</strong> Always restart Claude Desktop after changing the config</li>
-                    </ul>
-                </div>
-
-                <h4>📝 How to Use Your Token</h4>
-                <ol>
-                    <li><strong>Copy the Token:</strong> Select and copy the entire Authorization header value</li>
-                    <li><strong>Update Configuration:</strong> In your Claude Desktop MCP config, replace the placeholder with your token</li>
-                    <li><strong>Test:</strong> Restart Claude Desktop and ask Claude to use the BigID MCP server</li>
-                </ol>
-            </div>
+            <h4>📝 How to Use Your Token</h4>
+            <ol>
+                <li><strong>Copy the Token:</strong> Select and copy the entire Authorization header value</li>
+                <li><strong>Update Configuration:</strong> In your MCP client config, replace the placeholder with your token</li>
+                <li><strong>Test:</strong> Restart your MCP client and ask it to use the BigID MCP server</li>
+            </ol>
         </div>
 
         <div class="image-container">
-            <img src="example-claude-mcp-config.png" alt="Example Claude MCP Configuration">
-            <div class="image-caption">Example MCP server configuration in Claude Desktop</div>
+            <img src="example-claude-mcp-config.png" alt="Example MCP Configuration">
+            <div class="image-caption">Example MCP server configuration</div>
         </div>
 
-        <h2>📚 Step 4: Start Using BigID with Claude</h2>
+        <h2>📚 Step 4: Start Using BigID with Your MCP Client</h2>
         <div class="step">
-            <span class="step-number">5</span>
-            <strong>Start a New Chat</strong>
-            <p>Create a new chat in Claude Desktop to begin using the BigID MCP server.</p>
+            <span class="step-number">4</span>
+            <strong>Start Your MCP Client</strong>
+            <p>Launch your chosen MCP client to begin using the BigID MCP server.</p>
+            <ul>
+                <li><strong>Claude Desktop:</strong> Open Claude Desktop and start a new chat</li>
+                <li><strong>Gemini CLI:</strong> Run <code>gemini</code> in your terminal</li>
+            </ul>
         </div>
-
-
 
         <h2>🎯 Step 5: Begin Your BigID Queries</h2>
         <div class="step">
-            <span class="step-number">6</span>
-            <strong>Ask Claude About Your BigID Data</strong>
-            <p>Now you can ask Claude questions about your BigID data! Claude has access to all the BigID tools and can help you explore your data catalog, security posture, and more.</p>
+            <span class="step-number">5</span>
+            <strong>Ask Your MCP Client About Your BigID Data</strong>
+            <p>Now you can ask your MCP client questions about your BigID data! Your client has access to all the BigID tools and can help you explore your data catalog, security posture, and more.</p>
+            
+            <div class="info">
+                <h3>🔧 How to Invoke BigID MCP Server Tools</h3>
+                <p>To use the BigID MCP server, you need to specifically ask your LLM to use tools from the BigID MCP server. Here are some example prompts:</p>
+                
+                <h4>📊 Inventory and Data Discovery</h4>
+                <ul>
+                    <li><strong>"Use the BigID MCP server to get inventory aggregation data"</strong></li>
+                    <li><strong>"Show me the data categories from BigID using the MCP server tools"</strong></li>
+                    <li><strong>"Use BigID tools to search for catalog objects"</strong></li>
+                </ul>
+                
+                <h4>🛡️ Security and Compliance</h4>
+                <ul>
+                    <li><strong>"Use BigID MCP server to check for security cases"</strong></li>
+                    <li><strong>"Show me security trends using the BigID tools"</strong></li>
+                    <li><strong>"Use BigID to get cases grouped by policy"</strong></li>
+                </ul>
+                
+                <h4>📚 Catalog and Metadata</h4>
+                <ul>
+                    <li><strong>"Use BigID MCP server to search metadata"</strong></li>
+                    <li><strong>"Get catalog tags using BigID tools"</strong></li>
+                    <li><strong>"Use BigID to find object details"</strong></li>
+                </ul>
+                
+                <h4>🔗 Lineage and Relationships</h4>
+                <ul>
+                    <li><strong>"Use BigID MCP server to get lineage tree"</strong></li>
+                    <li><strong>"Show me data lineage using BigID tools"</strong></li>
+                </ul>
+                
+                <h4>🔐 Access Control and Identity</h4>
+                <ul>
+                    <li><strong>"Use BigID MCP server to get ACI data manager information"</strong></li>
+                    <li><strong>"Show me ACI groups using BigID tools"</strong></li>
+                    <li><strong>"Use BigID to get ACI users"</strong></li>
+                </ul>
+            </div>
+            
+            <div class="warning">
+                <h4>⚠️ Important Notes</h4>
+                <ul>
+                    <li><strong>Be Specific:</strong> Mention "BigID MCP server" or "BigID tools" in your requests if the LLM is being thick about using the BigID MCP server</li>
+                    <li><strong>Tool Names:</strong> The LLM will automatically use the correct tool names (like <code>get_inventory_aggregation</code>, <code>get_security_cases</code>, etc.)</li>
+                    <li><strong>Parameters:</strong> You can specify filters, pagination, and other parameters in natural language</li>
+                    <li><strong>Examples:</strong> "Use BigID MCP server to get security cases with high severity" or "Show me catalog objects tagged as PII using BigID tools"</li>
+                </ul>
+            </div>
+            
             <div class="note">
-                <strong>💡 Note:</strong> There is a BigID filter spec resource that can be added to your chat. It is primarily used for constructing custom queries for catalog endpoints. For most use cases, you can simply ask Claude to use the BigID MCP server directly.
+                <strong>💡 Note:</strong> There is a BigID filter spec resource that can be added to your chat. It is primarily used for constructing custom queries for catalog endpoints. For most use cases, you can simply ask your MCP client to use the BigID MCP server directly.
             </div>
         </div>
 
@@ -328,19 +464,17 @@
             <p><strong>Always validate MCP tool queries and results:</strong></p>
             <ul>
                 <li><strong>Inspect Tool Queries:</strong> Always review the MCP tool queries and results to see the raw data</li>
-                <li><strong>Validate Results:</strong> Cross-reference Claude's analysis against the raw data returned by the MCP tools</li>
-                <li><strong>Verify Accuracy:</strong> Don't rely solely on Claude's interpretation - check the underlying data yourself</li>
-                <li><strong>Review Permissions:</strong> Don't send anything to Claude that you aren't allowed to send</li>
+                <li><strong>Validate Results:</strong> Cross-reference your MCP client's analysis against the raw data returned by the MCP tools</li>
+                <li><strong>Verify Accuracy:</strong> Don't rely solely on your MCP client's interpretation - check the underlying data yourself</li>
+                <li><strong>Review Permissions:</strong> Don't send anything to your MCP client that you aren't allowed to send</li>
             </ul>
-            <p><strong>Remember:</strong> Claude is an AI assistant that can make mistakes. Always validate both the queries being made and the conclusions drawn from the results.</p>
+            <p><strong>Remember:</strong> MCP clients are AI assistants that can make mistakes. Always validate both the queries being made and the conclusions drawn from the results.</p>
         </div>
 
         <h2>🔍 Available Tools</h2>
         <div class="info">
-            <p>Claude has access to these BigID tools:</p>
+            <p>Your MCP client has access to these BigID tools:</p>
         </div>
-
-
 
         <div class="tool-category">
             <h3>📊 Inventory Tools</h3>
@@ -511,13 +645,14 @@
                 <li><strong>Bad Tool Queries:</strong> Ensure the BigID resource is added to each new chat</li>
                 <li><strong>Connection Issues:</strong> Check your network connection and BigID server accessibility</li>
                 <li><strong>Token Expired:</strong> Replace your user token if it has expired</li>
+                <li><strong>Gemini API Key Issues:</strong> Ensure GEMINI_API_KEY is set in your environment</li>
             </ul>
         </div>
 
         <div class="step">
             <span class="step-number">✅</span>
             <strong>You're All Set!</strong>
-            <p>Congratulations! You've successfully set up Claude Desktop with the BigID MCP server. You can now use Claude to interact with your BigID data.</p>
+            <p>Congratulations! You've successfully set up your MCP client with the BigID MCP server. You can now use your chosen client to interact with your BigID data.</p>
         </div>
     </div>
 

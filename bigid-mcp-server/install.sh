@@ -29,7 +29,7 @@ print_header
 
 # Open the setup guide in Chrome at the beginning
 print_status "Opening setup guide in Chrome..."
-SETUP_GUIDE_PATH="$(pwd)/docs/claude-desktop-setup-guide.html"
+SETUP_GUIDE_PATH="$(pwd)/docs/mcp-server-setup-guide.html"
 
 if [ -f "$SETUP_GUIDE_PATH" ]; then
     if command -v google-chrome &> /dev/null; then
@@ -159,17 +159,17 @@ else
     print_success "Project is already built (dist directory exists)"
 fi
 
-# Step 6: Create personalized Claude Desktop configuration
-print_status "Creating personalized Claude Desktop configuration..."
+# Step 6: Create generic MCP server configuration template
+print_status "Creating generic MCP server configuration template..."
 
 # Get the current directory (where the install script is executed)
 CURRENT_DIR=$(pwd)
 SERVER_JS_PATH="$CURRENT_DIR/dist/server.js"
 
-cat > claude-desktop-config.json << EOF
+cat > mcp-server-config.json << EOF
 {
   "mcpServers": {
-    "bigid-mcp-server": {
+    "bigid-mcp": {
       "command": "node",
       "args": ["$SERVER_JS_PATH"],
       "env": {
@@ -181,21 +181,22 @@ cat > claude-desktop-config.json << EOF
         "NODE_ENV": "production",
         "BIGID_MCP_LOG_LEVEL": "info"
       },
+      "timeout": 30000,
       "description": "BigID data discovery, catalog, and security monitoring"
     }
   }
 }
 EOF
 
-print_success "Claude Desktop configuration template created: claude-desktop-config.json"
+print_success "Generic MCP server configuration template created: mcp-server-config.json"
 
 # Display the configuration
 echo ""
-echo -e "${BLUE}Claude Desktop Configuration:${NC}"
-echo -e "${BLUE}==============================${NC}"
-cat claude-desktop-config.json
+echo -e "${BLUE}MCP Server Configuration Template:${NC}"
+echo -e "${BLUE}==================================${NC}"
+cat mcp-server-config.json
 echo ""
-echo -e "${BLUE}==============================${NC}"
+echo -e "${BLUE}==================================${NC}"
 
 # Step 7: Display next steps
 echo ""
@@ -207,13 +208,214 @@ echo "1. Edit the configuration above with your BigID credentials:"
 echo "   - Replace 'your-actual-user-token-here' with your BigID user token"
 echo "   - Replace 'your-bigid-domain.com' with your BigID domain"
 echo ""
-echo "2. Copy the configuration to Claude Desktop MCP settings"
+echo "2. Copy the configuration to your MCP client settings"
 echo ""
-echo "3. Restart Claude Desktop"
+echo "3. Restart your MCP client"
 echo ""
 print_status "Important notes:"
-echo "   - Sample configuration file saved as: claude-desktop-config.json"
+echo "   - Sample configuration file saved as: mcp-server-config.json"
 echo "   - Server path configured as: $SERVER_JS_PATH"
 echo "   - You may need to replace your user token periodically if it expires"
 echo ""
-print_status "For detailed instructions, see README.md" 
+print_status "For detailed instructions, see README.md"
+
+# Step 8: Ask if user wants to set up Gemini
+echo ""
+print_status "Would you like to set up Gemini CLI as well? (y/n)"
+read -r setup_gemini
+
+if [[ "$setup_gemini" =~ ^[Yy]$ ]]; then
+    print_status "Setting up Gemini CLI..."
+    
+    # Check if gemini CLI is installed
+    if command -v gemini &> /dev/null; then
+        print_success "Gemini CLI is installed"
+        
+        # Check if brew is available to check for updates
+        if command -v brew &> /dev/null; then
+            print_status "Checking Gemini CLI version..."
+            CURRENT_VERSION=$(gemini --version 2>/dev/null | head -n1)
+            BREW_VERSION=$(brew info gemini 2>/dev/null | grep -o '[0-9]\+\.[0-9]\+\.[0-9]\+' | head -n1)
+            
+            if [ -n "$BREW_VERSION" ] && [ -n "$CURRENT_VERSION" ]; then
+                print_status "Current version: $CURRENT_VERSION"
+                print_status "Latest available via brew: $BREW_VERSION"
+                
+                if [[ "$CURRENT_VERSION" != *"$BREW_VERSION"* ]]; then
+                    print_status "Your Gemini CLI version may be out of date."
+                    print_status "Consider updating with: brew upgrade gemini"
+                else
+                    print_success "Gemini CLI is up to date"
+                fi
+            fi
+        else
+            print_status "Homebrew not available - cannot check for updates"
+            print_status "Consider updating Gemini CLI manually if needed"
+        fi
+    else
+        print_status "Gemini CLI not found"
+        
+        # Check if brew is available to install
+        if command -v brew &> /dev/null; then
+            print_status "Installing Gemini CLI via Homebrew..."
+            brew install gemini
+            
+            if [ $? -ne 0 ]; then
+                print_error "Failed to install Gemini CLI"
+                print_status "You can install it manually from: https://github.com/google-gemini/gemini-cli/"
+            else
+                print_success "Gemini CLI installed successfully"
+            fi
+        else
+            print_error "Homebrew not available and Gemini CLI not installed"
+            print_status "Please install Gemini CLI manually from: https://github.com/google-gemini/gemini-cli/"
+        fi
+    fi
+    
+    # Create Gemini settings.json
+    if command -v gemini &> /dev/null; then
+        print_status "Would you like to create a global Gemini configuration at ~/.gemini/settings.json? (y/n)"
+        print_status "Note: You can also create .gemini/settings.json in your working directory for local configuration"
+        read -r create_gemini_config
+        
+        if [[ "$create_gemini_config" =~ ^[Yy]$ ]]; then
+            print_status "Creating Gemini configuration..."
+            
+            # Create ~/.gemini directory if it doesn't exist
+            GEMINI_CONFIG_DIR="$HOME/.gemini"
+            if [ ! -d "$GEMINI_CONFIG_DIR" ]; then
+                print_status "Creating Gemini config directory: $GEMINI_CONFIG_DIR"
+                mkdir -p "$GEMINI_CONFIG_DIR"
+                print_success "Created Gemini config directory: $GEMINI_CONFIG_DIR"
+            fi
+            
+            GEMINI_CONFIG_FILE="$GEMINI_CONFIG_DIR/settings.json"
+            
+            # Check if settings.json already exists
+            if [ -f "$GEMINI_CONFIG_FILE" ]; then
+                print_status "Gemini settings.json already exists at: $GEMINI_CONFIG_FILE"
+                print_status "Would you like to overwrite it with BigID MCP configuration? (y/n)"
+                read -r overwrite_gemini_config
+                
+                if [[ ! "$overwrite_gemini_config" =~ ^[Yy]$ ]]; then
+                    print_status "Skipping Gemini configuration"
+                fi
+            fi
+            
+            if [ ! -f "$GEMINI_CONFIG_FILE" ] || [[ "$overwrite_gemini_config" =~ ^[Yy]$ ]]; then
+                # Create the Gemini configuration
+                cat > "$GEMINI_CONFIG_FILE" << EOF
+{
+  "mcpServers": {
+    "bigid-mcp": {
+      "command": "node",
+      "args": [
+        "$SERVER_JS_PATH"
+      ],
+      "env": {
+        "BIGID_USER_TOKEN": "user-token",
+        "BIGID_DOMAIN": "sandbox.bigiddemo.com",
+        "BIGID_AUTH_TYPE": "user_token",
+        "BIGID_TIMEOUT": "30000",
+        "BIGID_RETRY_ATTEMPTS": "3",
+        "NODE_ENV": "production",
+        "BIGID_MCP_LOG_LEVEL": "info"
+      },
+      "timeout": 30000
+    }
+  }
+}
+EOF
+                print_success "Gemini configuration created at: $GEMINI_CONFIG_FILE"
+                
+                # Offer to open the file in TextEdit
+                print_status "Would you like to open the configuration file in TextEdit to add your user token? (y/n)"
+                read -r open_gemini_config
+                
+                if [[ "$open_gemini_config" =~ ^[Yy]$ ]]; then
+                    open -a TextEdit "$GEMINI_CONFIG_FILE"
+                    print_success "Opened Gemini configuration in TextEdit"
+                fi
+            fi
+        else
+            print_status "Skipping global Gemini configuration. You can create .gemini/settings.json in your working directory for local configuration."
+        fi
+        
+        # Check for API key setup
+        print_status "Would you like me to check your shell config files for existing Gemini API keys and help set one up (skip if you don't have one ready to paste)? (y/n)"
+        read -r check_api_key
+        
+        if [[ "$check_api_key" =~ ^[Yy]$ ]]; then
+            print_status "Checking for Gemini API key..."
+            
+            # Check if API key already exists in shell config files
+            SHELL_CONFIG_FILES=("$HOME/.bashrc" "$HOME/.zshrc")
+            API_KEY_EXISTS=false
+            
+            for config_file in "${SHELL_CONFIG_FILES[@]}"; do
+                if [ -f "$config_file" ]; then
+                    if grep -q "GEMINI_API_KEY\|GOOGLE_API_KEY" "$config_file"; then
+                        API_KEY_EXISTS=true
+                        print_status "API key found in: $config_file"
+                        break
+                    fi
+                fi
+            done
+            
+            if [ "$API_KEY_EXISTS" = false ]; then
+                print_status "No Gemini API key found in shell configuration files"
+                print_status "Would you like me to add your API key to your shell config? (y/n)"
+                read -r setup_api_key
+                
+                if [[ "$setup_api_key" =~ ^[Yy]$ ]]; then
+                    print_status "Please paste your Gemini API key:"
+                    read -r gemini_api_key
+                    
+                    if [ -n "$gemini_api_key" ]; then
+                        # Determine which shell config file to use
+                        SHELL_CONFIG=""
+                        if [ -f "$HOME/.zshrc" ]; then
+                            SHELL_CONFIG="$HOME/.zshrc"
+                        elif [ -f "$HOME/.bashrc" ]; then
+                            SHELL_CONFIG="$HOME/.bashrc"
+                        else
+                            SHELL_CONFIG="$HOME/.zshrc"
+                        fi
+                        
+                        # Add API key to shell config
+                        echo "" >> "$SHELL_CONFIG"
+                        echo "# Gemini API Key" >> "$SHELL_CONFIG"
+                        echo "export GEMINI_API_KEY=\"$gemini_api_key\"" >> "$SHELL_CONFIG"
+                        
+                        print_success "Added Gemini API key to: $SHELL_CONFIG"
+                        print_status "Please restart your terminal or run: source $SHELL_CONFIG"
+                    else
+                        print_error "No API key provided"
+                    fi
+                fi
+            fi
+        else
+            print_status "Skipping API key setup. You can set GEMINI_API_KEY manually later."
+        fi
+        
+        print_status "Gemini setup complete!"
+        print_status "Next steps for Gemini:"
+        echo "  1. Edit the configuration at: $GEMINI_CONFIG_FILE"
+        echo "  2. Replace 'user-token' with your BigID user token"
+        echo "  3. Replace 'sandbox.bigiddemo.com' with your BigID domain"
+        echo "  4. Set your GEMINI_API_KEY environment variable"
+        echo "  5. Restart your terminal or run: source ~/.zshrc (or ~/.bashrc)"
+        echo "  6. Create a fresh directory and start Gemini CLI: gemini"
+        
+    else
+        print_error "Gemini CLI is not available. Please install it first."
+    fi
+fi
+
+echo ""
+print_status "🎉 Installation complete!"
+if [[ "$setup_gemini" =~ ^[Yy]$ ]] && command -v gemini &> /dev/null; then
+    print_status "Create a fresh directory, open a terminal, and execute 'gemini' to start working with your MCP server!"
+else
+    print_status "Start working with your MCP server!"
+fi 
