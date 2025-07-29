@@ -235,7 +235,7 @@ if [[ "$setup_gemini" =~ ^[Yy]$ ]]; then
         if command -v brew &> /dev/null; then
             print_status "Checking Gemini CLI version..."
             CURRENT_VERSION=$(gemini --version 2>/dev/null | head -n1)
-            BREW_VERSION=$(brew info gemini 2>/dev/null | grep -o '[0-9]\+\.[0-9]\+\.[0-9]\+' | head -n1)
+            BREW_VERSION=$(brew info gemini-cli 2>/dev/null | grep -o '[0-9]\+\.[0-9]\+\.[0-9]\+' | head -n1)
             
             if [ -n "$BREW_VERSION" ] && [ -n "$CURRENT_VERSION" ]; then
                 print_status "Current version: $CURRENT_VERSION"
@@ -243,7 +243,7 @@ if [[ "$setup_gemini" =~ ^[Yy]$ ]]; then
                 
                 if [[ "$CURRENT_VERSION" != *"$BREW_VERSION"* ]]; then
                     print_status "Your Gemini CLI version may be out of date."
-                    print_status "Consider updating with: brew upgrade gemini"
+                    print_status "Consider updating with: brew upgrade gemini-cli"
                 else
                     print_success "Gemini CLI is up to date"
                 fi
@@ -258,7 +258,7 @@ if [[ "$setup_gemini" =~ ^[Yy]$ ]]; then
         # Check if brew is available to install
         if command -v brew &> /dev/null; then
             print_status "Installing Gemini CLI via Homebrew..."
-            brew install gemini
+            brew install gemini-cli
             
             if [ $? -ne 0 ]; then
                 print_error "Failed to install Gemini CLI"

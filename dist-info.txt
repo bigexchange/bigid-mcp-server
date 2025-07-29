@@ -1,9 +1,9 @@
 BigID MCP Server Distribution Package
 =====================================
-Version: 1.0.11
-Package: bigid-mcp-server-1.0.11.tar.gz
-Size: 188K
-Created: Mon Jul 28 17:43:21 PDT 2025
+Version: 1.0.12
+Package: bigid-mcp-server-1.0.12.tar.gz
+Size: 192K
+Created: Tue Jul 29 11:14:59 PDT 2025
 
 Contents:
 - BigID MCP Server TypeScript source code
@@ -12,8 +12,8 @@ Contents:
 - Documentation
 
 Installation:
-1. Extract: tar -xzf bigid-mcp-server-1.0.11.tar.gz
-2. Enter directory: cd bigid-mcp-server-1.0.11
+1. Extract: tar -xzf bigid-mcp-server-1.0.12.tar.gz
+2. Enter directory: cd bigid-mcp-server-1.0.12
 3. Install dependencies: npm install
 4. Build TypeScript: npm run build
 5. Run: ./install.sh
