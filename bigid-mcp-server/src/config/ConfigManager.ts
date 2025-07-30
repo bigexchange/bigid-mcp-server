@@ -3,28 +3,30 @@ import * as path from 'path';
 import { z } from 'zod';
 import { Config, ConfigSchema, ENV_VARS, BigIDConfig, MCPConfig } from './types';
 
-// Load environment variables from .env file if it exists
-const loadEnvFile = () => {
+// Load environment variables from .env file only as fallback
+const loadEnvFileAsFallback = () => {
   try {
     const dotenv = require('dotenv');
     const envPath = path.resolve(process.cwd(), '.env');
     
-    if (fs.existsSync(envPath)) {
-      // Removed console.log to avoid interfering with MCP server stdout
+    // Check if required environment variables are already set
+    const requiredVars = [ENV_VARS.BIGID_DOMAIN, ENV_VARS.BIGID_USER_TOKEN];
+    const hasRequiredVars = requiredVars.some(varName => process.env[varName]);
+    
+    // Only load .env if required variables are missing
+    if (!hasRequiredVars && fs.existsSync(envPath)) {
       const result = dotenv.config({ path: envPath });
       if (result.error) {
         console.warn('Error loading .env file:', result.error.message);
       }
-      // Removed success message to avoid stdout interference
     }
-    // Removed else block to avoid stdout interference
   } catch (error) {
     console.warn('dotenv not available, skipping .env file loading:', error);
   }
 };
 
-// Load .env file before any other operations
-loadEnvFile();
+// Load .env file as fallback before any other operations
+loadEnvFileAsFallback();
 
 export class ConfigManager {
   private config: Config;
@@ -35,10 +37,9 @@ export class ConfigManager {
 
   /**
    * Load configuration from multiple sources in order of priority:
-   * 1. Command line arguments
-   * 2. Environment variables
-   * 3. Configuration file
-   * 4. Default values
+   * 1. System environment variables (highest priority)
+   * 2. Configuration file
+   * 3. Default values
    */
   private loadConfig(): Config {
     // Start with default configuration
@@ -68,7 +69,7 @@ export class ConfigManager {
       Object.assign(defaultConfig, configFromFile);
     }
 
-    // Override with environment variables
+    // Override with environment variables (highest priority)
     const configFromEnv = this.loadConfigFromEnv();
     Object.assign(defaultConfig, configFromEnv);
 
@@ -107,6 +108,7 @@ export class ConfigManager {
    */
   private loadConfigFromEnv(): Partial<Config> {
     const config: Partial<Config> = {};
+
 
     // BigID configuration from environment
     if (process.env[ENV_VARS.BIGID_DOMAIN]) {

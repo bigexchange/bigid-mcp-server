@@ -178,6 +178,7 @@ dirs_to_remove=(
     "tests"
     "__tests__"
     ".tscache"
+    "archive"
 )
 
 for dir in "${dirs_to_remove[@]}"; do
@@ -263,8 +264,6 @@ Contents:
 Installation:
 1. Extract: tar -xzf $TARBALL_NAME
 2. Enter directory: cd $PACKAGE_NAME
-3. Install dependencies: npm install
-4. Build TypeScript: npm run build
 5. Run: ./install.sh
 
 WARNING: If you don't have node or Homebrew installed, the installer will request sudo. If you don't want to grant sudo, install Homebrew first (https://brew.sh)
@@ -281,6 +280,4 @@ echo
 echo "To install from this package:"
 echo "  tar -xzf $TARBALL_NAME"
 echo "  cd $PACKAGE_NAME"
-echo "  npm install"
-echo "  npm run build"
 echo "  ./install.sh"

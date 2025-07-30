@@ -54,8 +54,6 @@ else
     print_status "Continuing with installation..."
 fi
 
-
-
 # Check if running on macOS
 if [[ "$OSTYPE" != "darwin"* ]]; then
     print_error "This installer is designed for macOS only"
@@ -160,7 +158,7 @@ else
 fi
 
 # Step 6: Create generic MCP server configuration template
-print_status "Creating generic MCP server configuration template..."
+print_status "Creating MCP server configuration templates..."
 
 # Get the current directory (where the install script is executed)
 CURRENT_DIR=$(pwd)
@@ -181,8 +179,7 @@ cat > mcp-server-config.json << EOF
         "NODE_ENV": "production",
         "BIGID_MCP_LOG_LEVEL": "info"
       },
-      "timeout": 30000,
-      "description": "BigID data discovery, catalog, and security monitoring"
+      "timeout": 30000
     }
   }
 }
@@ -204,7 +201,7 @@ print_success "Installation completed successfully!"
 echo ""
 print_status "Next steps:"
 echo ""
-echo "1. Edit the configuration above with your BigID credentials:"
+echo "1. Edit the configuration files with your BigID credentials:"
 echo "   - Replace 'your-actual-user-token-here' with your BigID user token"
 echo "   - Replace 'your-bigid-domain.com' with your BigID domain"
 echo ""
@@ -217,7 +214,6 @@ echo "   - Sample configuration file saved as: mcp-server-config.json"
 echo "   - Server path configured as: $SERVER_JS_PATH"
 echo "   - You may need to replace your user token periodically if it expires"
 echo ""
-print_status "For detailed instructions, see README.md"
 
 # Step 8: Ask if user wants to set up Gemini
 echo ""
@@ -313,8 +309,8 @@ if [[ "$setup_gemini" =~ ^[Yy]$ ]]; then
         "$SERVER_JS_PATH"
       ],
       "env": {
-        "BIGID_USER_TOKEN": "user-token",
-        "BIGID_DOMAIN": "sandbox.bigiddemo.com",
+        "BIGID_USER_TOKEN": "your-actual-user-token-here",
+        "BIGID_DOMAIN": "your-bigid-domain.com",
         "BIGID_AUTH_TYPE": "user_token",
         "BIGID_TIMEOUT": "30000",
         "BIGID_RETRY_ATTEMPTS": "3",
@@ -341,71 +337,28 @@ EOF
             print_status "Skipping global Gemini configuration. You can create .gemini/settings.json in your working directory for local configuration."
         fi
         
-        # Check for API key setup
-        print_status "Would you like me to check your shell config files for existing Gemini API keys and help set one up (skip if you don't have one ready to paste)? (y/n)"
-        read -r check_api_key
-        
-        if [[ "$check_api_key" =~ ^[Yy]$ ]]; then
-            print_status "Checking for Gemini API key..."
-            
-            # Check if API key already exists in shell config files
-            SHELL_CONFIG_FILES=("$HOME/.bashrc" "$HOME/.zshrc")
-            API_KEY_EXISTS=false
-            
-            for config_file in "${SHELL_CONFIG_FILES[@]}"; do
-                if [ -f "$config_file" ]; then
-                    if grep -q "GEMINI_API_KEY\|GOOGLE_API_KEY" "$config_file"; then
-                        API_KEY_EXISTS=true
-                        print_status "API key found in: $config_file"
-                        break
-                    fi
-                fi
-            done
-            
-            if [ "$API_KEY_EXISTS" = false ]; then
-                print_status "No Gemini API key found in shell configuration files"
-                print_status "Would you like me to add your API key to your shell config? (y/n)"
-                read -r setup_api_key
-                
-                if [[ "$setup_api_key" =~ ^[Yy]$ ]]; then
-                    print_status "Please paste your Gemini API key:"
-                    read -r gemini_api_key
-                    
-                    if [ -n "$gemini_api_key" ]; then
-                        # Determine which shell config file to use
-                        SHELL_CONFIG=""
-                        if [ -f "$HOME/.zshrc" ]; then
-                            SHELL_CONFIG="$HOME/.zshrc"
-                        elif [ -f "$HOME/.bashrc" ]; then
-                            SHELL_CONFIG="$HOME/.bashrc"
-                        else
-                            SHELL_CONFIG="$HOME/.zshrc"
-                        fi
-                        
-                        # Add API key to shell config
-                        echo "" >> "$SHELL_CONFIG"
-                        echo "# Gemini API Key" >> "$SHELL_CONFIG"
-                        echo "export GEMINI_API_KEY=\"$gemini_api_key\"" >> "$SHELL_CONFIG"
-                        
-                        print_success "Added Gemini API key to: $SHELL_CONFIG"
-                        print_status "Please restart your terminal or run: source $SHELL_CONFIG"
-                    else
-                        print_error "No API key provided"
-                    fi
-                fi
-            fi
-        else
-            print_status "Skipping API key setup. You can set GEMINI_API_KEY manually later."
-        fi
+        # Provide authentication options
+        echo ""
+        print_status "Gemini CLI Authentication Options:"
+        echo ""
+        echo "Option 1: Google Account Authentication (Recommended)"
+        echo "  1. Launch Gemini CLI: gemini"
+        echo "  2. Select Google account authentication when prompted"
+        echo "  3. No API key needed!"
+        echo ""
+        echo "Option 2: API Key Authentication"
+        echo "  1. Set your API key: export GEMINI_API_KEY='your-api-key'"
+        echo "  2. Or add to shell config: echo 'export GEMINI_API_KEY=\"your-api-key\"' >> ~/.zshrc"
+        echo ""
         
         print_status "Gemini setup complete!"
         print_status "Next steps for Gemini:"
         echo "  1. Edit the configuration at: $GEMINI_CONFIG_FILE"
-        echo "  2. Replace 'user-token' with your BigID user token"
-        echo "  3. Replace 'sandbox.bigiddemo.com' with your BigID domain"
-        echo "  4. Set your GEMINI_API_KEY environment variable"
-        echo "  5. Restart your terminal or run: source ~/.zshrc (or ~/.bashrc)"
-        echo "  6. Create a fresh directory and start Gemini CLI: gemini"
+        echo "  2. Replace 'your-actual-user-token-here' with your BigID user token"
+        echo "  3. Replace 'your-bigid-domain.com' with your BigID domain"
+        echo "  4. Launch Gemini CLI: gemini"
+        echo "  5. Select Google account authentication when prompted"
+        echo "  6. Or set your GEMINI_API_KEY environment variable if desired"
         
     else
         print_error "Gemini CLI is not available. Please install it first."

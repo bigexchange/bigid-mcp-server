@@ -7,7 +7,7 @@ export const metadataObjectsCountSchema = {
     type: 'object',
     properties: {
       entityType: { type: 'string', description: 'The type of entity to count' },
-      searchText: { type: 'string', description: 'The text to search for' },
+      searchText: { type: 'string', description: 'The text to search for. WARNING: Queries that are too broad may cause the API to return an error.' },
     },
     required: ['searchText'],
   },

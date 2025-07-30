@@ -7,7 +7,7 @@ export const metadataObjectsSearchSchema = {
     type: 'object',
     properties: {
       entityType: { type: 'string', description: 'The type of entity to search for' },
-      searchText: { type: 'string', description: 'The text to search for' },
+      searchText: { type: 'string', description: 'The text to search for. WARNING: Queries that are too broad may cause the API to return an error.' },
       paging: { type: 'object', description: 'A paging object' },
       sort: { type: 'array', items: { type: 'object' }, description: 'An array of sort objects' },
       isHighlight: { type: 'boolean', description: 'Whether to highlight results' },

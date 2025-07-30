@@ -21,13 +21,51 @@ export const locationsSchema = {
       data: {
         type: 'object',
         properties: {
-          system_locations: {
+          applications_locations: {
             type: 'array',
-            description: 'Geographic distribution of data systems',
+            description: 'Geographic distribution of applications',
             items: {
               type: 'object',
               properties: {
                 _id: {
+                  anyOf: [
+                    { type: 'string' },
+                    { type: 'null' }
+                  ],
+                  description: 'Location identifier'
+                },
+                name: {
+                  anyOf: [
+                    { type: 'string' },
+                    { type: 'null' }
+                  ],
+                  description: 'Country/region name'
+                },
+                applications_count: {
+                  type: 'number',
+                  description: 'Number of applications in location'
+                },
+                target_data_sources: {
+                  type: 'array',
+                  description: 'Data sources in this location',
+                  items: {
+                    type: 'string'
+                  }
+                },
+                count: {
+                  type: 'number',
+                  description: 'Count value'
+                }
+              }
+            }
+          },
+          identity_locations: {
+            type: 'array',
+            description: 'Geographic distribution of identities',
+            items: {
+              type: 'object',
+              properties: {
+                id: {
                   type: 'string',
                   description: 'Location identifier'
                 },
@@ -37,11 +75,46 @@ export const locationsSchema = {
                 },
                 count: {
                   type: 'number',
-                  description: 'Amount of data in location'
+                  description: 'Number of identities in location'
+                },
+                avg: {
+                  type: 'number',
+                  description: 'Average value'
+                }
+              }
+            }
+          },
+          system_locations: {
+            type: 'array',
+            description: 'Geographic distribution of data systems',
+            items: {
+              type: 'object',
+              properties: {
+                id: {
+                  anyOf: [
+                    { type: 'string' },
+                    { type: 'null' }
+                  ],
+                  description: 'Location identifier'
+                },
+                name: {
+                  anyOf: [
+                    { type: 'string' },
+                    { type: 'null' }
+                  ],
+                  description: 'Country/region name'
+                },
+                count: {
+                  type: 'number',
+                  description: 'Number of systems in location'
+                },
+                avg: {
+                  type: 'number',
+                  description: 'Average value'
                 },
                 systems: {
                   type: 'array',
-                  description: 'Systems/applications in this location',
+                  description: 'Systems in this location',
                   items: {
                     type: 'string'
                   }
@@ -50,6 +123,10 @@ export const locationsSchema = {
             }
           }
         }
+      },
+      locationType: {
+        type: 'string',
+        description: 'The location type that was requested'
       }
     }
   }

@@ -296,14 +296,32 @@
 
             <div class="step">
                 <span class="step-number">2c</span>
-                <strong>Set Gemini API Key</strong>
-                <p>The installation script will help you set up your Gemini API key. If you need to do it manually:</p>
+                <strong>Gemini Authentication Options</strong>
+                <p>Gemini CLI supports two authentication methods:</p>
+                
+                <h4>Option 1: Google Account Authentication (Recommended)</h4>
                 <ol>
-                    <li>Get a BigID Google API key</li>
-                    <li>Add to your shell config file (~/.zshrc or ~/.bashrc):</li>
+                    <li>Launch Gemini CLI:</li>
+                </ol>
+                <div class="code-block">gemini</div>
+                <ol start="2">
+                    <li>Select Google account authentication when prompted</li>
+                    <li>Sign in with your Google account</li>
+                    <li>No API key needed!</li>
+                </ol>
+                
+                <h4>Option 2: API Key Authentication</h4>
+                <ol>
+                    <li>Set your API key via environment variable:</li>
                 </ol>
                 <div class="code-block">export GEMINI_API_KEY="your-api-key-here"</div>
+                <p>Or add to your shell config file (~/.zshrc or ~/.bashrc):</p>
+                <div class="code-block">echo 'export GEMINI_API_KEY="your-api-key-here"' >> ~/.zshrc</div>
                 <p>Then restart your terminal or run: <code>source ~/.zshrc</code> (or <code>~/.bashrc</code>)</p>
+                
+                <div class="info">
+                    <strong>💡 Tip:</strong> Google account authentication is simpler and doesn't require managing API keys.
+                </div>
             </div>
         </details>
 
@@ -647,7 +665,7 @@
                 <li><strong>Bad Tool Queries:</strong> Ensure the BigID resource is added to each new chat</li>
                 <li><strong>Connection Issues:</strong> Check your network connection and BigID server accessibility</li>
                 <li><strong>Token Expired:</strong> Replace your user token if it has expired</li>
-                <li><strong>Gemini API Key Issues:</strong> Ensure GEMINI_API_KEY is set in your environment</li>
+                <li><strong>Gemini CLI Issues:</strong> Ensure you're authenticated with Google account or have set your API key</li>
             </ul>
         </div>
 
