@@ -45,6 +45,21 @@ The install script will automatically:
 
 ## Configuration
 
+### Authentication
+
+The BigID MCP Server supports two authentication methods:
+
+1. **User Token Authentication (Recommended)**: 
+   - Uses the BigID refresh endpoint to exchange a user token for a system token
+   - System tokens are automatically cached and refreshed when needed
+   - More secure and follows BigID best practices
+   - Set `BIGID_AUTH_TYPE=user_token` and provide `BIGID_USER_TOKEN`
+
+2. **Session Authentication**:
+   - Uses username/password to create a session token
+   - Less secure and not recommended for production
+   - Set `BIGID_AUTH_TYPE=session` and provide `BIGID_USERNAME`/`BIGID_PASSWORD`
+
 ### Claude Desktop Setup
 
 1. **Open Claude Desktop Settings**:
@@ -84,14 +99,19 @@ The install script will automatically:
 
 1. **Go to Your BigID Instance**: Visit your BigID domain
 2. **Sign In**: Use your credentials to authenticate
-3. **Open Chrome DevTools**: Press `F12` or `Cmd+Option+I`
-4. **Go to Network Tab**: Click on the "Network" tab
-5. **Refresh the Page**: Press `F5` or `Cmd+R`
-6. **Find API Requests**: Look for requests to your BigID domain
-7. **Check Authorization Header**: Click on any request, then look in "Request Headers" for "Authorization"
-8. **Copy the Token**: Copy the entire Authorization header value
+3. **Navigate to Access Management**: Go to the Access Management section in your BigID instance
+4. **Generate API Token**: Look for the option to generate Tokens
+5. **GENERATE a Token**: Click the GENERATE button
+6. **Set Expiry**: Configure the token expiry period as needed
+7. **Copy the Token**: Copy the generated token value
+8. **SAVE your Changes**: Click SAVE
+9. **Add your token to the config**: Paste your token into the BIGID_USER_TOKEN value
 
 **Important Notes**:
+- The MCP server supports both access tokens and refresh tokens automatically
+- Access tokens are used directly for API calls
+- Refresh tokens are exchanged for system tokens using the refresh endpoint
+- System tokens are cached for 1 hour and automatically refreshed when needed
 - Tokens typically expire and need to be replaced periodically
 - BigID tokens are domain-specific (not cross-domain)
 - Keep your tokens secure and don't share them

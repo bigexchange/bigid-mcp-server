@@ -284,7 +284,7 @@
                 <span class="step-number">2a</span>
                 <strong>Install Gemini CLI</strong>
                 <p>The installation script will automatically check for and install Gemini CLI via Homebrew. If you prefer to install it manually:</p>
-                <div class="code-block">brew install gemini</div>
+                <div class="code-block">brew install gemini-cli</div>
                 <p>Or download from: <a href="https://github.com/google-gemini/gemini-cli/" target="_blank">GitHub</a></p>
             </div>
 
@@ -350,34 +350,36 @@
             
         <div class="info">
             <h3>🔐 Need Help Getting Your BigID User Token?</h3>
-            <p>If you don't have your BigID user token, you can get one using Chrome DevTools:</p>
+            <p>To get your BigID user token, you need to generate one from the BigID Access Management page:</p>
             
-            <h4>Get Token from Authorization Header</h4>
+            <h4>Generate Token from BigID Access Management</h4>
             <ol>
                 <li><strong>Go to Your BigID Instance:</strong> Visit your BigID domain (e.g., <a href="https://sandbox.bigiddemo.com">BigID Sandbox Environment</a>)</li>
-                <li><strong>Sign In:</strong> Use your Okta credentials to authenticate</li>
-                <li><strong>Open Chrome DevTools:</strong> Press <code>F12</code> or <code>Cmd+Option+I</code> (Mac), or right-click anywhere on the page and select "Inspect"</li>
-                <li><strong>Go to Network Tab:</strong> Click on the "Network" tab in DevTools</li>
-                <li><strong>Refresh the Page:</strong> Press <code>F5</code> or <code>Cmd+R</code> to refresh</li>
-                <li><strong>Find API Requests:</strong> Look for requests to your BigID domain in the network list</li>
-                <li><strong>Check Authorization Header:</strong> Click on any request, then look in the "Request Headers" section for "Authorization"</li>
-                <li><strong>Copy the Token:</strong> Copy the entire Authorization header value</li>
+                <li><strong>Sign In:</strong> Use your credentials to authenticate</li>
+                <li><strong>Navigate to Access Management:</strong> Go to the Access Management section in your BigID instance</li>
+                <li><strong>Generate API Token:</strong> Look for the option to generate Tokens</li>
+                <li><strong>GENERATE a Token:</strong> Click the GENERATE button</li>
+                <li><strong>Set Expiry:</strong> Configure the token expiry period as needed</li>
+                <li><strong>Copy the Token:</strong> Copy the generated token value</li>
+                <li><strong>SAVE your Changes:</strong> Click SAVE</li>
+                <li><strong>Add your token to the config:</strong> Paste your token into the BIGID_USER_TOKEN value</li>
             </ol>
 
             <div class="warning">
                 <h4>⚠️ Important Notes</h4>
                 <ul>
+                    <li><strong>Token Types:</strong> The MCP server supports both access tokens and refresh tokens automatically</li>
                     <li><strong>Token Expiry:</strong> These tokens typically expire and need to be replaced periodically</li>
                     <li><strong>Domain-Specific:</strong> BigID tokens are NOT cross-domain. You must use a different token for each BigID domain/instance</li>
                     <li><strong>Security:</strong> Keep your tokens secure and don't share them</li>
                     <li><strong>Demo Site:</strong> The sandbox demo is perfect for testing the setup</li>
-                    <li><strong>Restart Client:</strong> Always restart your MCP client after changing the config</li>
+                    <li><strong>Restart Client:</strong> Always restart your MCP client (Claude Desktop, Gemini CLI, etc.) after changing the config</li>
                 </ul>
             </div>
 
             <h4>📝 How to Use Your Token</h4>
             <ol>
-                <li><strong>Copy the Token:</strong> Select and copy the entire Authorization header value</li>
+                <li><strong>Copy the Token:</strong> Copy the generated token from the Access Management page</li>
                 <li><strong>Update Configuration:</strong> In your MCP client config, replace the placeholder with your token</li>
                 <li><strong>Test:</strong> Restart your MCP client and ask it to use the BigID MCP server</li>
             </ol>
