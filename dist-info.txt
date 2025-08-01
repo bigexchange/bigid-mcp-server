@@ -1,9 +1,9 @@
 BigID MCP Server Distribution Package
 =====================================
-Version: 1.0.17
-Package: bigid-mcp-server-1.0.17.tar.gz
+Version: 1.0.18
+Package: bigid-mcp-server-1.0.18.tar.gz
 Size: 192K
-Created: Wed Jul 30 15:49:09 PDT 2025
+Created: Fri Aug  1 09:56:56 PDT 2025
 
 Contents:
 - BigID MCP Server TypeScript source code
@@ -12,8 +12,8 @@ Contents:
 - Documentation
 
 Installation:
-1. Extract: tar -xzf bigid-mcp-server-1.0.17.tar.gz
-2. Enter directory: cd bigid-mcp-server-1.0.17
+1. Extract: tar -xzf bigid-mcp-server-1.0.18.tar.gz
+2. Enter directory: cd bigid-mcp-server-1.0.18
 5. Run: ./install.sh
 
 WARNING: If you don't have node or Homebrew installed, the installer will request sudo. If you don't want to grant sudo, install Homebrew first (https://brew.sh)
