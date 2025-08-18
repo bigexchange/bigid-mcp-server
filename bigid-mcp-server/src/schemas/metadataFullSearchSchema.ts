@@ -211,8 +211,7 @@ export const metadataFullSearchSchema = {
                 },
                 type: {
                   type: 'string',
-                  enum: ['file', 'rdb', 'policy', 'actionable_insights_cases'],
-                  description: 'Entity type'
+                  description: 'Entity type (file, rdb, policy, actionable_insights_cases, or other types returned by the API)'
                 },
                 id: { type: 'string', description: 'Unique identifier' }
               }

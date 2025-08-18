@@ -2,14 +2,7 @@ import axios, { AxiosInstance, AxiosResponse } from 'axios';
 import { BigIDAuth } from '../auth/BigIDAuth';
 import { ErrorHandler } from '../utils/ErrorHandler';
 import {
-  PolicyDTO,
-  CreatePolicyDTO,
-  UpdatePolicyDTO,
-  TestPolicyDTO,
-  TestPolicyResponseDTO,
-  PolicyCreateResponseDTO,
-  PolicyUpdateResponseDTO,
-  PoliciesApiResponse
+  PolicyDTO
 } from '../types/policiesTypes';
 
 export class PoliciesClient {

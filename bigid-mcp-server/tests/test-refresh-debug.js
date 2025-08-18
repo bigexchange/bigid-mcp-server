@@ -3,7 +3,12 @@ const axios = require('axios');
 async function debugRefreshResponse() {
   console.log('Debugging refresh endpoint response...');
   
-  const domain = process.env.BIGID_DOMAIN || 'sandbox.bigiddemo.com';
+  const domain = process.env.BIGID_DOMAIN;
+
+if (!domain) {
+  console.error('❌ BIGID_DOMAIN not set');
+  process.exit(1);
+}
   const userToken = process.env.BIGID_USER_TOKEN;
   
   if (!userToken) {

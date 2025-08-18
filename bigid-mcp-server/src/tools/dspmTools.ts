@@ -75,7 +75,7 @@ export class DSPMTools {
   /**
    * Get security trends for the last 30 days
    */
-  async getSecurityTrends(args: GetSecurityTrendsArgs): Promise<any> {
+  async getSecurityTrends(_: GetSecurityTrendsArgs): Promise<any> {
     try {
       const cacheKey = 'security_trends';
       const cached = await this.cache.get(cacheKey);

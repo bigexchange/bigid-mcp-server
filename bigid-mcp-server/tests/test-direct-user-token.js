@@ -10,7 +10,12 @@ try {
 async function testDirectUserToken() {
   console.log('Testing direct user token usage...');
   
-  const domain = process.env.BIGID_DOMAIN || 'sandbox.bigiddemo.com';
+  const domain = process.env.BIGID_DOMAIN;
+  
+  if (!domain) {
+    console.error('❌ BIGID_DOMAIN not set');
+    return;
+  }
   const userToken = process.env.BIGID_USER_TOKEN;
   
   if (!userToken) {

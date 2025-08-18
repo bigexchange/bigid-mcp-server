@@ -28,11 +28,9 @@ import {
 export class BigIDClient {
   private client: AxiosInstance;
   private auth: BigIDAuth;
-  private config: BigIDConfig;
-
+  
   constructor(auth: BigIDAuth, config: BigIDConfig) {
     this.auth = auth;
-    this.config = config;
     this.client = axios.create({
       baseURL: `https://${config.domain}/api/v1`,
       timeout: config.timeout,

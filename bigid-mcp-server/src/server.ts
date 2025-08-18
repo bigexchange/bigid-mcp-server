@@ -14,6 +14,7 @@ import { InventoryClient } from './client/InventoryClient';
 import { WidgetClient } from './client/WidgetClient';
 import { ACIClient } from './client/ACIClient';
 import { LocationClient } from './client/LocationClient';
+import { PIIClient } from './client/PIIClient';
 
 import { InventoryTools } from './tools/inventoryTools';
 import { CatalogTools } from './tools/catalogTools';
@@ -24,15 +25,16 @@ import { PoliciesTools } from './tools/policiesTools';
 import { WidgetTools } from './tools/widgetTools';
 import { ACITools } from './tools/aciTools';
 import { LocationTools } from './tools/locationTools';
+import { PIITools } from './tools/piiTools';
 import { CacheManager } from './cache/CacheManager';
-import { ErrorHandler } from './utils/ErrorHandler';
+// Removed unused ErrorHandler import
 import * as winston from 'winston';
 import { LineageTools } from './tools/lineageTools';
 import { LineageClient } from './client/LineageClient';
 
 import { MetadataSearchClient } from './client/MetadataSearchClient';
 import { MetadataSearchTools } from './tools/metadataSearchTools';
-import { StructuredFilterSchema } from './types/filterTypes';
+// Removed unused StructuredFilterSchema type import
 import { FilterConverter } from './utils/FilterConverter';
 import { allSchemas } from './schemas';
 import { SERVER_INSTRUCTIONS } from './config/serverInstructions';
@@ -69,6 +71,7 @@ class BigIDMCPServer {
   private widgetClient: WidgetClient;
   private aciClient: ACIClient;
   private locationClient: LocationClient;
+  private piiClient: PIIClient;
   private lineageClient: LineageClient;
   private metadataSearchClient: MetadataSearchClient;
 
@@ -84,6 +87,7 @@ class BigIDMCPServer {
   private policiesTools: PoliciesTools;
   private aciTools: ACITools;
   private locationTools: LocationTools;
+  private piiTools: PIITools;
   private cacheManager: CacheManager;
   private lineageTools: LineageTools;
 
@@ -105,6 +109,7 @@ class BigIDMCPServer {
     this.widgetClient = new WidgetClient(this.auth, config.bigid.domain);
     this.aciClient = new ACIClient(this.auth, config.bigid.domain);
     this.locationClient = new LocationClient(this.auth, config.bigid.domain);
+    this.piiClient = new PIIClient(this.auth, config.bigid.domain);
     this.lineageClient = new LineageClient(this.auth, config.bigid.domain);
 
 
@@ -123,6 +128,7 @@ class BigIDMCPServer {
     this.inventoryTools = new InventoryTools(this.inventoryClient, this.cacheManager);
     this.aciTools = new ACITools(this.aciClient, this.cacheManager);
     this.locationTools = new LocationTools(this.locationClient, this.cacheManager);
+    this.piiTools = new PIITools(this.piiClient, this.cacheManager);
     this.lineageTools = new LineageTools(this.lineageClient, this.cacheManager);
 
     // Create MCP server
@@ -333,6 +339,10 @@ class BigIDMCPServer {
       case 'get_locations':
         return await this.locationTools.getLocations(args as any);
 
+      // PII Tools
+      case 'get_pii_records':
+        return await this.piiTools.getPiiRecords();
+
       default:
         throw new Error(`Unknown tool: ${name}`);
     }
@@ -395,8 +405,7 @@ class BigIDMCPServer {
                 let content: string = '';
         let mimeType: string = 'text/plain';
         
-        const fs = await import('fs/promises');
-        const path = await import('path');
+        // Lazy imports are below inside the switch; remove unused here
         
         switch (uri) {
           case 'bigid://filter-spec':

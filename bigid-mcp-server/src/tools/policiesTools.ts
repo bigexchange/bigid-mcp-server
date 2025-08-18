@@ -21,7 +21,7 @@ export class PoliciesTools {
   /**
    * Get all compliance policies
    */
-  async getPolicies(args: GetPoliciesArgs): Promise<any> {
+  async getPolicies(_: GetPoliciesArgs): Promise<any> {
     try {
       const cacheKey = 'policies';
       const cached = await this.cache.get(cacheKey);

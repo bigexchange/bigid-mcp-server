@@ -32,18 +32,73 @@ export const lineageTreeSchema = {
             items: {
               type: 'object',
               properties: {
-                _id: {
-                  type: 'string',
-                  description: 'Source dataset identifier'
+                _id: { type: 'string' },
+                source: { type: 'string' },
+                scanId: { type: 'string' },
+                totalRows: { type: 'number' },
+                totalRowsWithFindings: { type: 'number' },
+                total_pii_count: { type: 'number' },
+                fields: {
+                  type: 'array',
+                  items: {
+                    type: 'object',
+                    properties: {
+                      fieldName: { type: 'string' },
+                      fieldType: { type: 'string' },
+                      fieldCount: { type: 'number' },
+                      findingCount: { type: 'number' },
+                      fieldClassifications: {
+                        type: 'array',
+                        items: {
+                          type: 'object',
+                          properties: {
+                            name: { type: 'string' },
+                            rank: { type: 'string' },
+                            confidence_level: { type: 'number' }
+                          }
+                        }
+                      },
+                      fieldAttribute: {
+                        type: 'array',
+                        items: {
+                          type: 'object',
+                          properties: {
+                            name: { type: 'string' },
+                            rank: { type: 'string' },
+                            confidence_level: { type: 'number' }
+                          },
+                          additionalProperties: true
+                        }
+                      }
+                    },
+                    additionalProperties: true
+                  }
                 },
                 childs: {
                   type: 'array',
                   description: 'Downstream datasets',
                   items: {
-                    type: 'string'
+                    type: 'object',
+                    additionalProperties: true
                   }
-                }
-              }
+                },
+                connection_details: {
+                  type: 'array',
+                  items: {
+                    type: 'object',
+                    properties: {
+                      linked_collection: { type: 'string' },
+                      origin_fields: { type: 'string' },
+                      destination_field: { type: 'string' },
+                      type: { type: 'string' },
+                      is_mirror: { type: 'boolean' }
+                    },
+                    additionalProperties: true
+                  }
+                },
+                links_depth: { type: 'number' }
+              },
+              additionalProperties: true
             }
           }
         }

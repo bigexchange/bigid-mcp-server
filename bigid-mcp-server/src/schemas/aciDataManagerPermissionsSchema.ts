@@ -111,6 +111,15 @@ export const aciDataManagerPermissionsSchema = {
       },
       error: errorSchema
     },
-    required: ['success', 'data']
+    oneOf: [
+      {
+        properties: { success: { const: true } },
+        required: ['success', 'data']
+      },
+      {
+        properties: { success: { const: false } },
+        required: ['success', 'error']
+      }
+    ]
   }
 }; 

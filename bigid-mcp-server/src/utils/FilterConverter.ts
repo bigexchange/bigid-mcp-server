@@ -1,10 +1,7 @@
 import { StructuredFilter, NumberFilter, DateFilter, RelativeDate, TagFilter } from '../types/filterTypes';
 import { 
-  structuredFilterConfig, 
   getFieldMapping, 
   getOperatorMapping, 
-  isTagBasedField, 
-  getTagName, 
   getTagQueryTemplate,
   requiresCatalogTag,
   getTagHierarchy,
@@ -12,11 +9,9 @@ import {
   isValidSensitivityValue,
   getSupportedEntityTypes,
   isValidEntityType,
-  isWorkingParameter,
   isBrokenParameter,
   isPartiallyWorkingParameter,
   isNoDataParameter,
-  getParameterWorkingStatus,
   getParameterNotes
 } from '../config/structuredFilterConfig';
 

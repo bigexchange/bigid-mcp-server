@@ -4,8 +4,7 @@ import { ErrorHandler } from '../utils/ErrorHandler';
 import {
   DataCategoryDTO,
   CreateDataCategoryDTO,
-  CreateDataCategoryResponseDTO,
-  DataCategoriesApiResponse
+  CreateDataCategoryResponseDTO
 } from '../types/dataCategoriesTypes';
 
 export class DataCategoriesClient {

@@ -79,6 +79,16 @@ export class ConfigManager {
     } catch (error) {
       if (error instanceof z.ZodError) {
         console.error('Configuration validation failed:', error.errors);
+        
+        // Check specifically for domain validation errors
+        const domainErrors = error.errors.filter(err => 
+          err.path.includes('bigid') && err.path.includes('domain')
+        );
+        
+        if (domainErrors.length > 0) {
+          throw new Error(`BigID domain configuration error: ${domainErrors[0].message}. Please set the BIGID_DOMAIN environment variable.`);
+        }
+        
         throw new Error('Invalid configuration');
       }
       throw error;
@@ -122,9 +132,9 @@ export class ConfigManager {
 
     // Helper function to ensure bigid config exists without overriding domain
     const ensureBigidConfig = () => {
-      if (!config.bigid) {
+      if (!config.bigid && process.env[ENV_VARS.BIGID_DOMAIN]) {
         config.bigid = {
-          domain: process.env[ENV_VARS.BIGID_DOMAIN] || '',
+          domain: process.env[ENV_VARS.BIGID_DOMAIN]!,
           auth: { type: 'session' },
           timeout: 30000,
           retry_attempts: 3,

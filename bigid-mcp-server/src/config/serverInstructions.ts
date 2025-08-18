@@ -27,6 +27,9 @@ export const SERVER_INSTRUCTIONS = `# BigID MCP Server
 - get_aci_groups: Group analysis and RBAC assessment
 - get_aci_users: User access patterns and risk identification
 
+## PII Records (get_pii_records)
+- Use to quickly retrieve recent PII findings across sources when validating detections or triaging identity-related incidents
+
 ## Performance
 - Use structured filters for complex criteria (PII, sensitivity, dates)
 - Start with counts before detailed queries

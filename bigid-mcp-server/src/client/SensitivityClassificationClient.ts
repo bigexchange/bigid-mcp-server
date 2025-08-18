@@ -2,12 +2,9 @@ import axios, { AxiosInstance, AxiosResponse } from 'axios';
 import { BigIDAuth } from '../auth/BigIDAuth';
 import { ErrorHandler } from '../utils/ErrorHandler';
 import {
-  BasicScConfigDto,
-  ScConfigCreateResultDto,
   ScConfigsGetResponseDto,
   ClassificationTotalRatioResponse,
-  ClassificationRatioResponse,
-  SensitivityClassificationApiResponse
+  ClassificationRatioResponse
 } from '../types/sensitivityClassificationTypes';
 
 export class SensitivityClassificationClient {
@@ -65,52 +62,23 @@ export class SensitivityClassificationClient {
     }
   }
 
-  /**
-   * Create a new sensitivity group
-   */
-  async createScConfig(config: BasicScConfigDto): Promise<ScConfigCreateResultDto> {
-    try {
-      const response: AxiosResponse<ScConfigCreateResultDto> = await this.client.post('/aci/sc/configs', config);
-      return response.data;
-    } catch (error) {
-      throw ErrorHandler.handleApiError(error as Error, 'Failed to create sensitivity configuration');
-    }
-  }
+  // Removed unused createScConfig
 
-  /**
-   * Update an existing sensitivity group
-   */
-  async updateScConfig(config: BasicScConfigDto): Promise<ScConfigCreateResultDto> {
-    try {
-      const response: AxiosResponse<ScConfigCreateResultDto> = await this.client.put('/aci/sc/configs', config);
-      return response.data;
-    } catch (error) {
-      throw ErrorHandler.handleApiError(error as Error, 'Failed to update sensitivity configuration');
-    }
-  }
+  // Removed unused updateScConfig
 
   /**
    * Get sensitivity group by ID
    */
-  async getScConfigById(id: string): Promise<ScConfigCreateResultDto> {
+  async getScConfigById(id: string): Promise<any> {
     try {
-      const response: AxiosResponse<ScConfigCreateResultDto> = await this.client.get(`/aci/sc/configs/${id}`);
+      const response: AxiosResponse<any> = await this.client.get(`/aci/sc/configs/${id}`);
       return response.data;
     } catch (error) {
       throw ErrorHandler.handleApiError(error as Error, `Failed to get sensitivity configuration for ID ${id}`);
     }
   }
 
-  /**
-   * Delete sensitivity group by ID
-   */
-  async deleteScConfig(id: string): Promise<void> {
-    try {
-      await this.client.delete(`/aci/sc/configs/${id}`);
-    } catch (error) {
-      throw ErrorHandler.handleApiError(error as Error, `Failed to delete sensitivity configuration for ID ${id}`);
-    }
-  }
+  // Removed unused deleteScConfig
 
   /**
    * Get the ratio of classified to unclassified objects

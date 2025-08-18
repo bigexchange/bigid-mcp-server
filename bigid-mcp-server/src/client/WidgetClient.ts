@@ -4,11 +4,7 @@ import { ErrorHandler } from '../utils/ErrorHandler';
 import { PagingHelper } from '../utils/PagingHelper';
 import {
   WidgetRequestDTO,
-  WidgetResponseDTO,
-  ComplianceByFrameworkRequestDTO,
-  ComplianceByControlRequestDTO,
-  ComplianceByPolicyRequestDTO,
-  ComplianceByDataSourceTypeRequestDTO
+  WidgetResponseDTO
 } from '../types/widgetTypes';
 
 export class WidgetClient {

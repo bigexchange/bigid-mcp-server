@@ -6,20 +6,9 @@ import {
   CatalogResponseDTO,
   ObjectDetailsDTO,
   TagDTO,
-  CreateTagDTO,
-  UpdateTagDTO,
   RuleDTO,
-  CreateRuleDTO,
-  UpdateRuleDTO,
-  RelationDTO,
-  CatalogExportRequestDTO,
   CatalogCountRequestDTO,
   CatalogCountResponseDTO,
-  DistinctValuesRequestDTO,
-  DistinctValuesResponseDTO,
-  ObjectSummaryDTO,
-  CatalogHealthDTO,
-  CatalogApiResponse
 } from '../types/catalogTypes';
 
 export class DataCatalogClient {
@@ -110,19 +99,7 @@ export class DataCatalogClient {
     }
   }
 
-  /**
-   * Get object columns information
-   */
-  async getObjectColumns(fullyQualifiedName: string): Promise<any> {
-    try {
-      const response: AxiosResponse = await this.client.get(`/object-details/columns`, {
-        params: { object_name: fullyQualifiedName }
-      });
-      return response.data;
-    } catch (error) {
-      throw ErrorHandler.handleApiError(error as Error, `Failed to get object columns for ${fullyQualifiedName}`);
-    }
-  }
+  // Removed unused getObjectColumns
 
   /**
    * Get all tags
@@ -136,40 +113,9 @@ export class DataCatalogClient {
     }
   }
 
-  /**
-   * Create a new tag
-   */
-  async createTag(tag: CreateTagDTO): Promise<TagDTO> {
-    try {
-      const response: AxiosResponse<TagDTO> = await this.client.post('/tags', tag);
-      return response.data;
-    } catch (error) {
-      throw ErrorHandler.handleApiError(error as Error, 'Failed to create tag');
-    }
-  }
+  // Removed unused tag mutations
 
-  /**
-   * Update an existing tag
-   */
-  async updateTag(id: string, tag: UpdateTagDTO): Promise<TagDTO> {
-    try {
-      const response: AxiosResponse<TagDTO> = await this.client.patch(`/tags/${id}`, tag);
-      return response.data;
-    } catch (error) {
-      throw ErrorHandler.handleApiError(error as Error, `Failed to update tag ${id}`);
-    }
-  }
-
-  /**
-   * Delete a tag
-   */
-  async deleteTag(id: string): Promise<void> {
-    try {
-      await this.client.delete(`/tags/${id}`);
-    } catch (error) {
-      throw ErrorHandler.handleApiError(error as Error, `Failed to delete tag ${id}`);
-    }
-  }
+  
 
   /**
    * Get all rules
@@ -183,115 +129,17 @@ export class DataCatalogClient {
     }
   }
 
-  /**
-   * Create a new rule
-   */
-  async createRule(rule: CreateRuleDTO): Promise<RuleDTO> {
-    try {
-      const response: AxiosResponse<RuleDTO> = await this.client.post('/rules', rule);
-      return response.data;
-    } catch (error) {
-      throw ErrorHandler.handleApiError(error as Error, 'Failed to create rule');
-    }
-  }
+  // Removed unused rule mutations
 
-  /**
-   * Update an existing rule
-   */
-  async updateRule(id: string, rule: UpdateRuleDTO): Promise<RuleDTO> {
-    try {
-      const response: AxiosResponse<RuleDTO> = await this.client.patch(`/rules/${id}`, rule);
-      return response.data;
-    } catch (error) {
-      throw ErrorHandler.handleApiError(error as Error, `Failed to update rule ${id}`);
-    }
-  }
+  
 
-  /**
-   * Delete a rule
-   */
-  async deleteRule(id: string): Promise<void> {
-    try {
-      await this.client.delete(`/rules/${id}`);
-    } catch (error) {
-      throw ErrorHandler.handleApiError(error as Error, `Failed to delete rule ${id}`);
-    }
-  }
+  // Removed unused rule operations
 
-  /**
-   * Apply a rule
-   */
-  async applyRule(ruleId: string): Promise<any> {
-    try {
-      const response: AxiosResponse = await this.client.post(`/rules/apply/${ruleId}`);
-      return response.data;
-    } catch (error) {
-      throw ErrorHandler.handleApiError(error as Error, `Failed to apply rule ${ruleId}`);
-    }
-  }
+  // Removed unused getRelations
 
-  /**
-   * Apply all rules
-   */
-  async applyAllRules(): Promise<any> {
-    try {
-      const response: AxiosResponse = await this.client.post('/rules/apply-all');
-      return response.data;
-    } catch (error) {
-      throw ErrorHandler.handleApiError(error as Error, 'Failed to apply all rules');
-    }
-  }
+  // Removed unused getAllRelations
 
-  /**
-   * Get rule count
-   */
-  async getRuleCount(ruleId: string): Promise<number> {
-    try {
-      const response: AxiosResponse<{ count: number }> = await this.client.get(`/rules/${ruleId}/count`);
-      return response.data.count;
-    } catch (error) {
-      throw ErrorHandler.handleApiError(error as Error, `Failed to get rule count for ${ruleId}`);
-    }
-  }
-
-  /**
-   * Get data relationships for an object
-   */
-  async getRelations(fullyQualifiedName: string): Promise<RelationDTO[]> {
-    try {
-      const response: AxiosResponse<RelationDTO[]> = await this.client.get(`/relations/${encodeURIComponent(fullyQualifiedName)}`);
-      return response.data;
-    } catch (error) {
-      throw ErrorHandler.handleApiError(error as Error, `Failed to get relations for ${fullyQualifiedName}`);
-    }
-  }
-
-  /**
-   * Get all relations
-   */
-  async getAllRelations(): Promise<RelationDTO[]> {
-    try {
-      const response: AxiosResponse<RelationDTO[]> = await this.client.get('/relations');
-      return response.data;
-    } catch (error) {
-      throw ErrorHandler.handleApiError(error as Error, 'Failed to get all relations');
-    }
-  }
-
-  /**
-   * Export catalog data
-   */
-  async exportCatalog(format: string, filter?: string): Promise<Buffer> {
-    try {
-      const response: AxiosResponse<Buffer> = await this.client.get('/file-download/export', {
-        params: { format, filter },
-        responseType: 'arraybuffer'
-      });
-      return Buffer.from(response.data);
-    } catch (error) {
-      throw ErrorHandler.handleApiError(error as Error, 'Failed to export catalog data');
-    }
-  }
+  // Removed unused exportCatalog
 
   /**
    * Get catalog count
@@ -307,133 +155,23 @@ export class DataCatalogClient {
     }
   }
 
-  /**
-   * Get distinct values for a field
-   */
-  async getDistinctValues(fieldName: string, params: DistinctValuesRequestDTO): Promise<DistinctValuesResponseDTO> {
-    try {
-      const response: AxiosResponse<DistinctValuesResponseDTO> = await this.client.get(`/distinct-values/${fieldName}`, {
-        params
-      });
-      return response.data;
-    } catch (error) {
-      throw ErrorHandler.handleApiError(error as Error, `Failed to get distinct values for field ${fieldName}`);
-    }
-  }
+  // Removed unused getDistinctValues
 
-  /**
-   * Get object summary
-   */
-  async getObjectSummary(): Promise<ObjectSummaryDTO> {
-    try {
-      const response: AxiosResponse<ObjectSummaryDTO> = await this.client.get('/object-summary');
-      return response.data;
-    } catch (error) {
-      throw ErrorHandler.handleApiError(error as Error, 'Failed to get object summary');
-    }
-  }
+  // Removed unused getObjectSummary
 
-  /**
-   * Get catalog health status
-   */
-  async getHealth(): Promise<CatalogHealthDTO> {
-    try {
-      const response: AxiosResponse<CatalogHealthDTO> = await this.client.get('/health');
-      return response.data;
-    } catch (error) {
-      throw ErrorHandler.handleApiError(error as Error, 'Failed to get catalog health status');
-    }
-  }
+  // Removed unused getHealth
 
-  /**
-   * Get version history
-   */
-  async getVersionHistory(params?: any): Promise<any> {
-    try {
-      const response: AxiosResponse = await this.client.get('/version-history', { params });
-      return response.data;
-    } catch (error) {
-      throw ErrorHandler.handleApiError(error as Error, 'Failed to get version history');
-    }
-  }
+  // Removed unused getVersionHistory
 
-  /**
-   * Get manual fields
-   */
-  async getManualFields(): Promise<any> {
-    try {
-      const response: AxiosResponse = await this.client.get('/manual-fields');
-      return response.data;
-    } catch (error) {
-      throw ErrorHandler.handleApiError(error as Error, 'Failed to get manual fields');
-    }
-  }
+  // Removed unused getManualFields
 
-  /**
-   * Get manual fields by source
-   */
-  async getManualFieldsBySource(source: string): Promise<any> {
-    try {
-      const response: AxiosResponse = await this.client.get(`/manual-fields/by-source`, {
-        params: { source }
-      });
-      return response.data;
-    } catch (error) {
-      throw ErrorHandler.handleApiError(error as Error, `Failed to get manual fields for source ${source}`);
-    }
-  }
+  // Removed unused getManualFieldsBySource
 
-  /**
-   * Get row level findings count
-   */
-  async getRowLevelFindingsCount(params?: any): Promise<any> {
-    try {
-      const response: AxiosResponse = await this.client.post('/row-level-findings/count', params);
-      return response.data;
-    } catch (error) {
-      throw ErrorHandler.handleApiError(error as Error, 'Failed to get row level findings count');
-    }
-  }
+  // Removed unused row-level findings methods
 
-  /**
-   * Get row level findings stream
-   */
-  async getRowLevelFindingsStream(params?: any): Promise<any> {
-    try {
-      const response: AxiosResponse = await this.client.post('/row-level-findings/stream', params, {
-        responseType: 'stream'
-      });
-      return response.data;
-    } catch (error) {
-      throw ErrorHandler.handleApiError(error as Error, 'Failed to get row level findings stream');
-    }
-  }
+  // Removed unused getDataSourceRiskSummary
 
-  /**
-   * Get data source risk summary
-   */
-  async getDataSourceRiskSummary(dsName?: string): Promise<any> {
-    try {
-      const url = dsName ? `/ds-risk/summary/${dsName}` : '/ds-risk/summary';
-      const response: AxiosResponse = await this.client.get(url);
-      return response.data;
-    } catch (error) {
-      throw ErrorHandler.handleApiError(error as Error, 'Failed to get data source risk summary');
-    }
-  }
-
-  /**
-   * Get integration settings
-   */
-  async getIntegrationSettings(id?: string): Promise<any> {
-    try {
-      const url = id ? `/integration-settings/${id}` : '/integration-settings';
-      const response: AxiosResponse = await this.client.get(url);
-      return response.data;
-    } catch (error) {
-      throw ErrorHandler.handleApiError(error as Error, 'Failed to get integration settings');
-    }
-  }
+  // Removed unused getIntegrationSettings
 
 
 

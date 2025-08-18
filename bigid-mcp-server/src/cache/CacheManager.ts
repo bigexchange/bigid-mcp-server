@@ -44,7 +44,7 @@ export class CacheManager {
     });
 
     // Set up event listeners
-    this.cache.on('expired', (key, value) => {
+    this.cache.on('expired', (key) => {
       logger.debug(`Cache key expired: ${key}`);
     });
 

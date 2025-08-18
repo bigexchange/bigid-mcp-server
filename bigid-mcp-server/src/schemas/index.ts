@@ -1,5 +1,5 @@
 // Import shared schemas
-import { errorSchema, messageSchema, statusSchema, statusCodeSchema, successResponseSchema } from './sharedSchemas';
+// Importing module solely for re-export, so convert to type-only re-exports below
 
 // Import all tool schemas
 import { inventoryAggregationSchema } from './inventoryAggregationSchema';
@@ -30,8 +30,9 @@ import { metadataQuickSearchSchema } from './metadataQuickSearchSchema';
 import { metadataFullSearchSchema } from './metadataFullSearchSchema';
 import { metadataObjectsSearchSchema } from './metadataObjectsSearchSchema';
 import { metadataObjectsCountSchema } from './metadataObjectsCountSchema';
+import { piiRecordsSchema } from './piiRecordsSchema';
 
-// Re-export shared schemas
+// Re-export shared schemas (remove unused local import)
 export { errorSchema, messageSchema, statusSchema, statusCodeSchema, successResponseSchema } from './sharedSchemas';
 
 // Re-export all tool schemas
@@ -63,6 +64,7 @@ export { metadataQuickSearchSchema } from './metadataQuickSearchSchema';
 export { metadataFullSearchSchema } from './metadataFullSearchSchema';
 export { metadataObjectsSearchSchema } from './metadataObjectsSearchSchema';
 export { metadataObjectsCountSchema } from './metadataObjectsCountSchema';
+export { piiRecordsSchema } from './piiRecordsSchema';
 
 // Export all schemas as an array for easy registration
 export const allSchemas = [
@@ -94,4 +96,5 @@ export const allSchemas = [
   metadataFullSearchSchema,
   metadataObjectsSearchSchema,
   metadataObjectsCountSchema,
+  piiRecordsSchema,
 ]; 

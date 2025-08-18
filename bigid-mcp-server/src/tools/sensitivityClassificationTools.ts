@@ -11,41 +11,11 @@ interface GetScConfigsArgs {
   requireTotalCount?: boolean;
 }
 
-interface CreateScConfigArgs {
-  name: string;
-  description?: string;
-  levels: Array<{
-    name: string;
-    description?: string;
-    color?: string;
-    priority: number;
-    enabled?: boolean;
-  }>;
-  enabled?: boolean;
-}
-
-interface UpdateScConfigArgs {
-  id: string;
-  name?: string;
-  description?: string;
-  levels?: Array<{
-    id?: string;
-    name: string;
-    description?: string;
-    color?: string;
-    priority: number;
-    enabled?: boolean;
-  }>;
-  enabled?: boolean;
-}
-
 interface GetScConfigByIdArgs {
   id: string;
 }
 
-interface DeleteScConfigArgs {
-  id: string;
-}
+// Removed unused create/update/delete args
 
 interface GetClassificationRatioByNameArgs {
   name: string;
@@ -99,51 +69,6 @@ export class SensitivityClassificationTools {
   }
 
   /**
-   * Create a new sensitivity group
-   */
-  async createScConfig(args: CreateScConfigArgs): Promise<any> {
-    try {
-      const result = await this.scClient.createScConfig({
-        name: args.name,
-        description: args.description,
-        levels: args.levels,
-        enabled: args.enabled
-      });
-      
-      // Invalidate cache since we added a new config
-      await this.cache.delete('sc_configs');
-      
-      return { success: true, data: result };
-    } catch (error) {
-      const errorInfo = ErrorHandler.handleApiError(error as Error, 'create_sc_config');
-      return { success: false, error: ErrorHandler.createUserFriendlyMessage(errorInfo) };
-    }
-  }
-
-  /**
-   * Update an existing sensitivity group
-   */
-  async updateScConfig(args: UpdateScConfigArgs): Promise<any> {
-    try {
-      const result = await this.scClient.updateScConfig({
-        id: args.id,
-        name: args.name || '',
-        description: args.description,
-        levels: args.levels || [],
-        enabled: args.enabled
-      });
-      
-      // Invalidate cache since we updated a config
-      await this.cache.delete('sc_configs');
-      
-      return { success: true, data: result };
-    } catch (error) {
-      const errorInfo = ErrorHandler.handleApiError(error as Error, 'update_sc_config');
-      return { success: false, error: ErrorHandler.createUserFriendlyMessage(errorInfo) };
-    }
-  }
-
-  /**
    * Get sensitivity group by ID
    */
   async getScConfigById(args: GetScConfigByIdArgs): Promise<any> {
@@ -164,23 +89,7 @@ export class SensitivityClassificationTools {
     }
   }
 
-  /**
-   * Delete sensitivity group by ID
-   */
-  async deleteScConfig(args: DeleteScConfigArgs): Promise<any> {
-    try {
-      await this.scClient.deleteScConfig(args.id);
-      
-      // Invalidate cache since we deleted a config
-      await this.cache.delete('sc_configs');
-      await this.cache.delete(`sc_config_${args.id}`);
-      
-      return { success: true, data: { message: `Sensitivity configuration with ID ${args.id} deleted successfully` } };
-    } catch (error) {
-      const errorInfo = ErrorHandler.handleApiError(error as Error, 'delete_sc_config');
-      return { success: false, error: ErrorHandler.createUserFriendlyMessage(errorInfo) };
-    }
-  }
+  // Removed create/update/delete config methods as dead code
 
   /**
    * Get the ratio of classified to unclassified objects

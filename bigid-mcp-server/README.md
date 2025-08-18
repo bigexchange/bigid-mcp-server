@@ -30,7 +30,6 @@ The BigID MCP Server provides 28+ tools for interacting with BigID APIs, includi
 
 2. **Run the install script**:
    ```bash
-   chmod +x install.sh
    ./install.sh
    ```
 
@@ -57,7 +56,6 @@ The BigID MCP Server supports two authentication methods:
 
 2. **Session Authentication**:
    - Uses username/password to create a session token
-   - Less secure and not recommended for production
    - Set `BIGID_AUTH_TYPE=session` and provide `BIGID_USERNAME`/`BIGID_PASSWORD`
 
 ### MCP Client Setup

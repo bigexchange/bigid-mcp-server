@@ -2,7 +2,7 @@ import { z } from 'zod';
 
 // Configuration schema for BigID settings
 export const BigIDConfigSchema = z.object({
-  domain: z.string(),
+  domain: z.string().min(1, 'Domain cannot be empty'),
   auth: z.object({
     type: z.enum(['session', 'user_token']),
     username: z.string().optional(),

@@ -4,16 +4,7 @@ import { ErrorHandler } from '../utils/ErrorHandler';
 import { PagingHelper } from '../utils/PagingHelper';
 import {
   InventoryAggregationRequestDTO,
-  InventoryResponseDTO,
-  TagsAggregationRequestDTO,
-  SensitivityFilterAggregationRequestDTO,
-  SourceAggregationRequestDTO,
-  SourceTypeAggregationRequestDTO,
-  AttributeAggregationRequestDTO,
-  CategoryExtendedAggregationRequestDTO,
-  DataFormatAggregationRequestDTO,
-  DuplicateFilesAggregationRequestDTO,
-  ObjectStatusAggregationRequestDTO
+  InventoryResponseDTO
 } from '../types/inventoryTypes';
 
 export class InventoryClient {

@@ -26,7 +26,7 @@ export class DataCategoriesTools {
   /**
    * Get all data categories
    */
-  async getDataCategories(args: GetDataCategoriesArgs): Promise<any> {
+  async getDataCategories(_: GetDataCategoriesArgs): Promise<any> {
     try {
       const cacheKey = 'data_categories';
       const cached = await this.cache.get(cacheKey);
