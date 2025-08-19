@@ -1,0 +1,77 @@
+{
+  "dxt_version": "0.1",
+  "name": "bigid-mcp-server",
+  "version": "1.0.18",
+  "description": "An MCP server for interacting with your BigID system",
+  "author": {
+    "name": "BigID",
+    "url": "https://bigid.com"
+  },
+  "homepage": "https://bigid.com",
+  "support": "https://developer.bigid.com/",
+  "configuration": [
+    {
+      "name": "BIGID_USER_TOKEN",
+      "type": "string",
+      "description": "Your BigID user token.",
+      "required": true
+    },
+    {
+      "name": "BIGID_DOMAIN",
+      "type": "string",
+      "description": "Your BigID domain.",
+      "required": true
+    },
+    {
+      "name": "BIGID_AUTH_TYPE",
+      "type": "string",
+      "description": "Authentication type ('user_token' or 'session').",
+      "required": true,
+      "default": "user_token"
+    },
+    {
+      "name": "BIGID_TIMEOUT",
+      "type": "number",
+      "description": "API timeout in milliseconds.",
+      "required": false,
+      "default": 30000
+    },
+    {
+      "name": "BIGID_RETRY_ATTEMPTS",
+      "type": "number",
+      "description": "Number of retry attempts on failure.",
+      "required": false,
+      "default": 3
+    },
+    {
+      "name": "BIGID_MCP_LOG_LEVEL",
+      "type": "string",
+      "description": "Logging level for the server (e.g., 'info', 'debug').",
+      "required": false,
+      "default": "info"
+    }
+  ],
+  "server": {
+    "type": "node",
+    "entry_point": "server.js",
+    "mcp_config": {
+      "command": "node",
+      "args": [
+        "${__dirname}/server.js"
+      ],
+      "env": {}
+    }
+  },
+  "keywords": [
+    "bigid",
+    "privacy",
+    "automation",
+    "cloud",
+    "saas"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/bigexchange/bigid-mcp-server"
+  }
+}
