@@ -64,7 +64,7 @@ git push origin "$TAG"
 
 # Create GitHub release and upload the DXT file
 echo "Creating GitHub release and uploading asset..."
-gh release create "$TAG" "dist/$DXT_FILE" --title "Release $TAG" --notes "Release for version $VERSION"
+gh release create "$TAG" "dist/$DXT_FILE" --title "Release $TAG" --notes-file ../INSTALLATION_NOTE.txt
 
 echo "Successfully created GitHub release and uploaded the DXT package!"
 
