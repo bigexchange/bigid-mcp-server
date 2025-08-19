@@ -1,7 +1,0 @@
-To install this DXT file in BigID:
-
-1. Log in to your BigID instance with administrative privileges.
-2. Navigate to the Administration -> Extensions section.
-3. Click on the 'Upload Extension' button.
-4. Select the .dxt file from your local machine.
-5. The extension will be uploaded and installed. You may need to restart certain BigID services for the changes to take full effect.

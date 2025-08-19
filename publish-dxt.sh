@@ -33,10 +33,10 @@ fi
 echo "Building TypeScript project..."
 npm run build
 
-# Copy manifest.json and installation note to the dist folder
-echo "Copying manifest.json and installation note to dist folder..."
+# Copy manifest.json and release note to the dist folder
+echo "Copying manifest.json and release note to dist folder..."
 cp manifest.json dist/
-cp ../INSTALLATION_NOTE.txt dist/
+cp ../RELEASE_NOTE.md dist/
 
 # Navigate into the dist folder
 echo "Navigating to dist folder..."
@@ -64,7 +64,7 @@ git push origin "$TAG"
 
 # Create GitHub release and upload the DXT file
 echo "Creating GitHub release and uploading asset..."
-gh release create "$TAG" "dist/$DXT_FILE" --title "Release $TAG" --notes-file ../INSTALLATION_NOTE.txt
+gh release create "$TAG" "dist/$DXT_FILE" --title "Release $TAG" --notes-file ../RELEASE_NOTE.md
 
 echo "Successfully created GitHub release and uploaded the DXT package!"
 
