@@ -8,7 +8,18 @@ This MCP Server provides tools to interact with the BigID API, allowing AI agent
 
 This server can be used with any DXT-compatible application or configured to run directly in your preferred IDE (Cursor, Cline, etc).
 
-### For Cline Desktop (using NPX)
+### DXT Installation (Recommended)
+
+1.  Go to the [releases page](https://github.com/bigexchange/bigid-mcp-server/releases) for this repository.
+2.  Download the latest `.dxt` file from the assets section.
+3.  Open the downloaded `.dxt` file in a DXT-compatible application like Claude Desktop. This will start the installation process.
+4.  You will be prompted to configure the required environment variables (`BIGID_USER_TOKEN`, `BIGID_DOMAIN`, etc.) during setup.
+
+### Manual Setup (using NPX)
+
+The following sections describe how to set up the server manually using `npx`.
+
+#### For Cline Desktop
 
 You can configure the server to run directly with `npx` in Cline Desktop's MCP settings. There are two ways to do this:
 
@@ -61,7 +72,7 @@ Alternatively, you can add the following JSON object to your `cline_mcp_settings
 
 Replace `"YOUR_BIGID_USER_TOKEN"` and `"YOUR_BIGID_DOMAIN"` with your actual credentials.
 
-### For Cursor
+#### For Cursor
 
 Add the following to your `mcp_servers.json` file:
 

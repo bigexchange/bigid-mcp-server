@@ -48,7 +48,7 @@ chmod +x server.js
 
 # Copy other necessary files from the package root directory
 echo "Copying additional files..."
-cp ../README.md .
+cp ../../README.md .
 cp ../install.sh .
 cp ../bigid-filter-spec.yml .
 cp -r ../docs .
