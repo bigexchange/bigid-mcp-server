@@ -1,5 +1,7 @@
 # BigID MCP Server
 
+[![Install MCP Server](https://cursor.com/deeplink/mcp-install-dark.svg)](https://cursor.com/en/install-mcp?name=bigid&config=eyJjb21tYW5kIjoibnB4IGJpZ2lkLW1jcC1zZXJ2ZXIiLCJlbnYiOnsiQklHSURfVVNFUl9UT0tFTiI6IllPVVJfQklHSURfVVNFUl9UT0tFTiIsIkJJR0lEX0RPTUFJTiI6IllPVVJfQklHSURfRE9NQUlOIiwiQklHSURfQVVUSF9UWVBFIjoidXNlcl90b2tlbiIsIkJJR0lEX1RJTUVPVVQiOiIzMDAwMCIsIkJJR0lEX1JFVFJZX0FUVEVNUFRTIjoiMyIsIkJJR0lEX01DUF9MT0dfTEVWRUwiOiJpbmZvIn0sInRyYW5zcG9ydFR5cGUiOiJzdGRpbyJ9)
+
 This MCP Server provides tools to interact with the BigID API, allowing AI agents to access data discovery, catalog, and security features.
 
 ## Installation and Setup
