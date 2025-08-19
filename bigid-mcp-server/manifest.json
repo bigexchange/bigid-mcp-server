@@ -9,48 +9,49 @@
   },
   "homepage": "https://bigid.com",
   "support": "https://developer.bigid.com/",
-  "configuration": [
-    {
-      "name": "BIGID_USER_TOKEN",
+  "user_config": {
+    "BIGID_USER_TOKEN": {
       "type": "string",
+      "title": "BigID User Token",
       "description": "Your BigID user token.",
-      "required": true
+      "required": true,
+      "sensitive": true
     },
-    {
-      "name": "BIGID_DOMAIN",
+    "BIGID_DOMAIN": {
       "type": "string",
+      "title": "BigID Domain",
       "description": "Your BigID domain.",
       "required": true
     },
-    {
-      "name": "BIGID_AUTH_TYPE",
+    "BIGID_AUTH_TYPE": {
       "type": "string",
+      "title": "BigID Auth Type",
       "description": "Authentication type ('user_token' or 'session').",
       "required": true,
       "default": "user_token"
     },
-    {
-      "name": "BIGID_TIMEOUT",
+    "BIGID_TIMEOUT": {
       "type": "number",
+      "title": "BigID Timeout",
       "description": "API timeout in milliseconds.",
       "required": false,
       "default": 30000
     },
-    {
-      "name": "BIGID_RETRY_ATTEMPTS",
+    "BIGID_RETRY_ATTEMPTS": {
       "type": "number",
+      "title": "BigID Retry Attempts",
       "description": "Number of retry attempts on failure.",
       "required": false,
       "default": 3
     },
-    {
-      "name": "BIGID_MCP_LOG_LEVEL",
+    "BIGID_MCP_LOG_LEVEL": {
       "type": "string",
+      "title": "BigID MCP Log Level",
       "description": "Logging level for the server (e.g., 'info', 'debug').",
       "required": false,
       "default": "info"
     }
-  ],
+  },
   "server": {
     "type": "node",
     "entry_point": "server.js",
@@ -59,7 +60,14 @@
       "args": [
         "${__dirname}/server.js"
       ],
-      "env": {}
+      "env": {
+        "BIGID_USER_TOKEN": "${user_config.BIGID_USER_TOKEN}",
+        "BIGID_DOMAIN": "${user_config.BIGID_DOMAIN}",
+        "BIGID_AUTH_TYPE": "${user_config.BIGID_AUTH_TYPE}",
+        "BIGID_TIMEOUT": "${user_config.BIGID_TIMEOUT}",
+        "BIGID_RETRY_ATTEMPTS": "${user_config.BIGID_RETRY_ATTEMPTS}",
+        "BIGID_MCP_LOG_LEVEL": "${user_config.BIGID_MCP_LOG_LEVEL}"
+      }
     }
   },
   "keywords": [
