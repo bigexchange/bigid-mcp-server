@@ -32,8 +32,7 @@ export const metadataObjectsSearchSchema = {
               properties: {
                 entityType: {
                   type: 'string',
-                  enum: ['catalog', 'actionable_insights_cases', 'rdb'],
-                  description: 'Entity type - catalog (data objects), actionable_insights_cases (security cases), rdb (database objects)'
+                  description: 'Entity type identifier. Sandbox may return values outside the documented set (e.g., "file", "policy").',
                 },
                 data: {
                   type: 'object',

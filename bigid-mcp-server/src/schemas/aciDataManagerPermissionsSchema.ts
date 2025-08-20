@@ -107,7 +107,7 @@ export const aciDataManagerPermissionsSchema = {
           },
           message: messageSchema
         },
-        required: ['status', 'statusCode', 'data']
+        required: ['status', 'statusCode']
       },
       error: errorSchema
     },

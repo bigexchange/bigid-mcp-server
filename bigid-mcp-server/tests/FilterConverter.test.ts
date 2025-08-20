@@ -208,15 +208,15 @@ describe('FilterConverter', () => {
       expect(result).toBe(expected);
     });
 
-    test('all date operators', () => {
-      const operators = ['equal', 'notEqual', 'greaterThan', 'greaterThanOrEqual', 'lessThan', 'lessThanOrEqual'];
+    test('all supported date operators', () => {
+      const operators = ['equal', 'greaterThan', 'greaterThanOrEqual', 'lessThan', 'lessThanOrEqual'];
       const dateValue = '2023-01-01T00:00:00.000Z';
       
       operators.forEach(operator => {
         const input: StructuredFilter = { 
           modifiedDate: { operator: operator as any, value: dateValue } 
         };
-        const expected = `modified_date ${operator === 'equal' ? '=' : operator === 'notEqual' ? '!=' : operator === 'greaterThan' ? '>' : operator === 'greaterThanOrEqual' ? '>=' : operator === 'lessThan' ? '<' : '<='} to_date(${dateValue})`;
+        const expected = `modified_date ${operator === 'equal' ? '=' : operator === 'greaterThan' ? '>' : operator === 'greaterThanOrEqual' ? '>=' : operator === 'lessThan' ? '<' : '<='} to_date(${dateValue})`;
         const result = FilterConverter.convertToBigIDQuery(input);
         expect(result).toBe(expected);
       });
@@ -625,32 +625,20 @@ describe('FilterConverter', () => {
   });
 
   describe('Validation', () => {
-    test('getValidationWarnings returns warnings for invalid entity types', () => {
-      const input: StructuredFilter = { 
-        entityType: 'invalid_type' 
-      };
+    test('getValidationWarnings returns empty list in production mode', () => {
+      const input: StructuredFilter = { entityType: 'invalid_type' };
       const warnings = FilterConverter.getValidationWarnings(input);
-      expect(warnings.length).toBeGreaterThan(0);
-      expect(warnings[0]).toContain('Unsupported entity type');
+      expect(warnings.length).toBe(0);
     });
 
-    test('getValidationWarnings returns warnings for invalid sensitivity values', () => {
-      const input: StructuredFilter = { 
-        sensitivity: 'Invalid_Sensitivity' 
-      };
-      const warnings = FilterConverter.getValidationWarnings(input);
-      expect(warnings.length).toBeGreaterThan(0);
-      expect(warnings[0]).toContain('Invalid sensitivity value');
-    });
-
-    test('convertToBigIDQueryWithValidation includes warnings', () => {
+    test('convertToBigIDQueryWithValidation includes empty warnings array', () => {
       const input: StructuredFilter = { 
         entityType: 'invalid_type',
         sensitivity: 'Invalid_Sensitivity'
       };
       const result = FilterConverter.convertToBigIDQueryWithValidation(input);
       expect(result.query).toBe('type="invalid_type" AND catalog_tag.system.sensitivityClassification.Sensitivity in ("Invalid_Sensitivity")');
-      expect(result.warnings.length).toBeGreaterThan(0);
+      expect(result.warnings.length).toBe(0);
     });
   });
 

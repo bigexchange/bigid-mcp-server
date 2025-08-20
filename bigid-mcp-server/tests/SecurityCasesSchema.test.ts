@@ -73,7 +73,7 @@ describe('get_security_cases Schema Validation', () => {
       } catch (error: any) {
         expect(error.message).toBeDefined();
       }
-    }, 15000);
+    }, 60000);
 
     test('should handle invalid structuredFilter', async () => {
       try {

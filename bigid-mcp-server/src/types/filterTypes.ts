@@ -1,10 +1,10 @@
 export interface NumberFilter {
-  operator: 'equal' | 'notEqual' | 'greaterThan' | 'greaterThanOrEqual' | 'lessThan' | 'lessThanOrEqual';
+  operator: 'equal' | 'greaterThan' | 'greaterThanOrEqual' | 'lessThan' | 'lessThanOrEqual';
   value: number;
 }
 
 export interface DateFilter {
-  operator: 'equal' | 'notEqual' | 'greaterThan' | 'greaterThanOrEqual' | 'lessThan' | 'lessThanOrEqual';
+  operator: 'equal' | 'greaterThan' | 'greaterThanOrEqual' | 'lessThan' | 'lessThanOrEqual';
   value: string | RelativeDate;
 }
 
@@ -112,7 +112,7 @@ export const StructuredFilterSchema = {
       description: 'File size in bytes',
       type: 'object',
       properties: {
-        operator: {"enum": ["equal", "notEqual", "greaterThan", "greaterThanOrEqual", "lessThan", "lessThanOrEqual"]},
+        operator: {"enum": ["equal", "greaterThan", "greaterThanOrEqual", "lessThan", "lessThanOrEqual"]},
         value: {"type": "number"}
       },
       required: ["operator", "value"]
@@ -122,7 +122,7 @@ export const StructuredFilterSchema = {
       description: 'File size in bytes (alternative to fileSize)',
       type: 'object',
       properties: {
-        operator: {"enum": ["equal", "notEqual", "greaterThan", "greaterThanOrEqual", "lessThan", "lessThanOrEqual"]},
+        operator: {"enum": ["equal", "greaterThan", "greaterThanOrEqual", "lessThan", "lessThanOrEqual"]},
         value: {"type": "number"}
       },
       required: ["operator", "value"]
@@ -143,7 +143,7 @@ export const StructuredFilterSchema = {
       description: 'Last modified date filter',
       type: 'object',
       properties: {
-        operator: {"enum": ["equal", "notEqual", "greaterThan", "greaterThanOrEqual", "lessThan", "lessThanOrEqual"]},
+        operator: {"enum": ["equal", "greaterThan", "greaterThanOrEqual", "lessThan", "lessThanOrEqual"]},
         value: {
           oneOf: [
             {"type": "string", "description": "ISO date: 2023-01-01T00:00:00.000Z"},
@@ -167,7 +167,7 @@ export const StructuredFilterSchema = {
       description: 'Created date filter - same structure as modifiedDate',
       type: 'object',
       properties: {
-        operator: {"enum": ["equal", "notEqual", "greaterThan", "greaterThanOrEqual", "lessThan", "lessThanOrEqual"]},
+        operator: {"enum": ["equal", "greaterThan", "greaterThanOrEqual", "lessThan", "lessThanOrEqual"]},
         value: {
           oneOf: [
             {"type": "string"},
@@ -190,7 +190,7 @@ export const StructuredFilterSchema = {
       description: 'Last scan date filter - same structure as date filters',
       type: 'object',
       properties: {
-        operator: {"enum": ["equal", "notEqual", "greaterThan", "greaterThanOrEqual", "lessThan", "lessThanOrEqual"]},
+        operator: {"enum": ["equal", "greaterThan", "greaterThanOrEqual", "lessThan", "lessThanOrEqual"]},
         value: {
           oneOf: [
             {"type": "string"},
