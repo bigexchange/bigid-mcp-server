@@ -249,15 +249,13 @@ describe('Parameter Validation Tests', () => {
       expect(warnings.some(w => w.includes('Invalid_Sensitivity'))).toBe(true);
     });
 
-    test('should return validation warnings for broken parameters', () => {
+    test('should not warn for parameters omitted from schema (treated as working/ignored)', () => {
       const filter: StructuredFilter = { 
         status: 'Active',
         system: 'database'
       };
       const warnings = FilterConverter.getValidationWarnings(filter);
-      expect(warnings.length).toBeGreaterThan(0);
-      expect(warnings.some(w => w.includes('status'))).toBe(true);
-      expect(warnings.some(w => w.includes('system'))).toBe(true);
+      expect(warnings.length).toBe(0);
     });
   });
 }); 

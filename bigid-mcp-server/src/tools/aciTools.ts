@@ -123,7 +123,7 @@ export class ACITools {
       ...params
     });
     
-    const cacheKey = `aci_data_manager_permissions_${params.itemPath}_${JSON.stringify(finalParams)}`;
+    const cacheKey = this.cache.createDomainKey(this.aciClient.getDomain(), `aci_data_manager_permissions_${params.itemPath}_${JSON.stringify(finalParams)}`);
     
     try {
       const cached = await this.cache.get(cacheKey);
@@ -132,7 +132,10 @@ export class ACITools {
       }
 
       const { itemPath, ...queryParams } = finalParams;
-      const result = await this.aciClient.getDataManagerPermissions(itemPath, queryParams);
+      const result = await ErrorHandler.withRetry(
+        () => this.aciClient.getDataManagerPermissions(itemPath, queryParams),
+        { maxAttempts: 3, delayMs: 500, backoffMultiplier: 2 }
+      );
       await this.cache.set(cacheKey, result, 300); // Cache for 5 minutes
       return { success: true, data: result };
     } catch (error) {

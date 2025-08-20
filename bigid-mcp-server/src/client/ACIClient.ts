@@ -100,26 +100,27 @@ export class ACIClient {
   /**
    * Get permissions for a specific data manager item
    */
-  async getDataManagerPermissions(itemPath: string, params: { skip?: number; limit?: number; requireTotalCount?: boolean } = {}): Promise<{ permissions: ACIPermission[] }> {
-    const queryParams = new URLSearchParams();
-    
-    if (params.skip !== undefined) {
-      queryParams.append('skip', params.skip.toString());
-    }
-    if (params.limit !== undefined) {
-      queryParams.append('limit', params.limit.toString());
-    }
-    if (params.requireTotalCount !== undefined) {
-      queryParams.append('requireTotalCount', params.requireTotalCount.toString());
-    }
+  async getDataManagerPermissions(
+    itemPath: string,
+    params: { skip?: number; limit?: number; requireTotalCount?: boolean } = {}
+  ): Promise<{ permissions: ACIPermission[] }> {
+    // Build query using plain object so axios handles encoding correctly
+    const query: Record<string, any> = {
+      app_id: 'acl', // required by working requests
+    };
+    if (params.skip !== undefined) query.skip = params.skip;
+    if (params.limit !== undefined) query.limit = params.limit;
+    if (params.requireTotalCount !== undefined) query.requireTotalCount = params.requireTotalCount;
 
     try {
-      // URL-encode the item path as shown in the working query
-      const encodedPath = encodeURIComponent(itemPath);
-      const response: AxiosResponse<{ permissions: ACIPermission[] }> = await this.client.get(`/data-manager/${encodedPath}/permissions?${queryParams.toString()}`, {
-        headers: { Authorization: await this.auth.getAuthHeader() }
-      });
-      
+      const encodedPath = encodeURIComponent(itemPath.trim());
+      const response: AxiosResponse<{ permissions: ACIPermission[] }> = await this.client.get(
+        `/data-manager/${encodedPath}/permissions/`,
+        {
+          params: query,
+          headers: { Authorization: await this.auth.getAuthHeader() },
+        }
+      );
       return response.data;
     } catch (error) {
       throw ErrorHandler.handleApiError(error as Error, 'Failed to get ACI data manager permissions');

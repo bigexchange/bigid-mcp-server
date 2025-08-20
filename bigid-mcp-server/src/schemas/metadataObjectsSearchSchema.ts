@@ -2,7 +2,7 @@ import { errorSchema } from './sharedSchemas';
 
 export const metadataObjectsSearchSchema = {
   name: 'metadata_objects_search',
-  description: 'Search for objects in the data explorer',
+  description: 'Search for objects in the data explorer. Outputs may include fullyQualifiedName for use with get_object_details and anchor collections for lineage exploration.',
   inputSchema: {
     type: 'object',
     properties: {

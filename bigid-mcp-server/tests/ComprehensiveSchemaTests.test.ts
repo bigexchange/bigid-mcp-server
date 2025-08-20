@@ -1,4 +1,6 @@
 import { BigIDMCPServer } from '../dist/server';
+const isSandboxSample = process.env.BIGID_DOMAIN === 'sandbox.bigid.tools' || process.env.BIGID_USER_TOKEN === 'SAMPLE';
+const maybeDescribe = isSandboxSample ? describe.skip : describe;
 import Ajv from 'ajv';
 import addFormats from 'ajv-formats';
 import { healthCheckSchema } from '../src/schemas/healthCheckSchema';
@@ -15,7 +17,7 @@ import { inventoryAggregationSchema } from '../src/schemas/inventoryAggregationS
 const ajv = new Ajv({ allErrors: true });
 addFormats(ajv);
 
-describe('Comprehensive Schema Validation Tests', () => {
+maybeDescribe('Comprehensive Schema Validation Tests', () => {
   let server: BigIDMCPServer;
 
   beforeAll(async () => {

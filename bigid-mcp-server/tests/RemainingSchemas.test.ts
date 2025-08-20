@@ -20,7 +20,7 @@ describe('Remaining Schemas Validation', () => {
   beforeAll(async () => {
     server = new BigIDMCPServer();
     await server.initialize(true);
-  }, 30000);
+  }, 90000);
 
   afterAll(async () => {
     await server.cleanup();
@@ -52,7 +52,7 @@ describe('Remaining Schemas Validation', () => {
         }
         console.log('API error for sensitivity config by ID:', error.message);
       }
-    }, 15000);
+    }, 60000);
   });
 
   describe('Total Classification Ratios', () => {
@@ -67,7 +67,7 @@ describe('Remaining Schemas Validation', () => {
         }
         console.log('API error for total classification ratios:', error.message);
       }
-    }, 15000);
+    }, 60000);
   });
 
   describe('Classification Ratio by Name', () => {
@@ -84,7 +84,7 @@ describe('Remaining Schemas Validation', () => {
         }
         console.log('API error for classification ratio by name:', error.message);
       }
-    }, 15000);
+    }, 60000);
   });
 
   describe('Classification Ratio by ID', () => {
@@ -101,7 +101,7 @@ describe('Remaining Schemas Validation', () => {
         }
         console.log('API error for classification ratio by ID:', error.message);
       }
-    }, 15000);
+    }, 60000);
   });
 
   describe('Dashboard Widget', () => {
@@ -118,7 +118,7 @@ describe('Remaining Schemas Validation', () => {
         }
         console.log('API error for dashboard widget:', error.message);
       }
-    }, 15000);
+    }, 60000);
   });
 
   describe('ACI Data Manager', () => {
@@ -133,7 +133,7 @@ describe('Remaining Schemas Validation', () => {
         }
         console.log('API error for ACI data manager:', error.message);
       }
-    }, 15000);
+    }, 60000);
   });
 
   describe('ACI Data Manager Permissions', () => {
@@ -148,7 +148,7 @@ describe('Remaining Schemas Validation', () => {
         }
         console.log('API error for ACI data manager permissions:', error.message);
       }
-    }, 15000);
+    }, 60000);
   });
 
   describe('ACI Groups', () => {
@@ -163,7 +163,7 @@ describe('Remaining Schemas Validation', () => {
         }
         console.log('API error for ACI groups:', error.message);
       }
-    }, 15000);
+    }, 60000);
   });
 
   describe('ACI Users', () => {

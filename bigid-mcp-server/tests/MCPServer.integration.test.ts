@@ -16,7 +16,7 @@ describe('BigID MCP Server Integration Tests', () => {
   beforeAll(async () => {
     server = new BigIDMCPServer();
     await server.initialize(true); // Initialize in testing mode
-  });
+  }, 90000);
 
   afterAll(async () => {
     if (server) {

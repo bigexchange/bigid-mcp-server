@@ -17,7 +17,7 @@ export const sensitivityConfigsSchema = {
       },
       sort: {
         type: 'string',
-        description: 'Sorting criteria as JSON array. Examples: [{"field": "name", "order": "asc"}]'
+        description: 'Sorting criteria. Example: sort by name ascending or descending'
       },
       filter: {
         type: 'string',

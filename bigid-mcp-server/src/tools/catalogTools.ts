@@ -10,7 +10,6 @@ interface GetCatalogObjectsPostArgs {
   skip?: number;
   limit?: number;
   offset?: number;
-  sort?: string;
   offsetKey?: string;
   ignoreLimit?: boolean;
   sample?: number;
@@ -55,25 +54,25 @@ export class CatalogTools {
    */
   async getCatalogObjectsPost(args: GetCatalogObjectsPostArgs): Promise<any> {
     try {
-      const cacheKey = `catalog_objects_post_${JSON.stringify(args)}`;
+      const stableArgs = { ...args };
+      const cacheKey = `catalog_objects_post_${JSON.stringify(stableArgs)}`;
       const cached = await this.cache.get(cacheKey);
       if (cached) {
         return { success: true, data: cached };
       }
 
       const result = await this.catalogClient.getObjectsPost({
-        filter: args.filter,
-        skip: args.skip,
-        limit: args.limit,
-        offset: args.offset,
-        sort: args.sort,
-        offsetKey: args.offsetKey,
-        ignoreLimit: args.ignoreLimit,
-        sample: args.sample,
-        requireTotalCount: args.requireTotalCount,
-        respectHiddenTags: args.respectHiddenTags,
-        getColumnOrFieldOccurrencesCounterFlag: args.getColumnOrFieldOccurrencesCounterFlag,
-        getNumIdentitiesFlag: args.getNumIdentitiesFlag
+        filter: stableArgs.filter,
+        skip: stableArgs.skip,
+        limit: stableArgs.limit,
+        offset: stableArgs.offset,
+        offsetKey: stableArgs.offsetKey,
+        ignoreLimit: stableArgs.ignoreLimit,
+        sample: stableArgs.sample,
+        requireTotalCount: stableArgs.requireTotalCount,
+        respectHiddenTags: stableArgs.respectHiddenTags,
+        getColumnOrFieldOccurrencesCounterFlag: stableArgs.getColumnOrFieldOccurrencesCounterFlag,
+        getNumIdentitiesFlag: stableArgs.getNumIdentitiesFlag
       });
       
       await this.cache.set(cacheKey, result, 1800); // Cache for 30 minutes

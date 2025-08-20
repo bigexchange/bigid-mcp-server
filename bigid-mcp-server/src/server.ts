@@ -36,7 +36,8 @@ import { MetadataSearchClient } from './client/MetadataSearchClient';
 import { MetadataSearchTools } from './tools/metadataSearchTools';
 // Removed unused StructuredFilterSchema type import
 import { FilterConverter } from './utils/FilterConverter';
-import { allSchemas } from './schemas';
+import { allSchemas, buildAdvertisedSchemas, createSchemaRegistry } from './schemas';
+import Ajv from 'ajv';
 import { SERVER_INSTRUCTIONS } from './config/serverInstructions';
 
 // Configure logging - only log to stderr to avoid interfering with MCP protocol stdout
@@ -242,7 +243,46 @@ class BigIDMCPServer {
 
   // Consolidated tool execution logic
   private async executeTool(name: string, args: any): Promise<any> {
+    // Validate full input schema (not the truncated one) before execution
+    // Provide actionable error instructing to use expand_schema when lazy input is enabled
+    try {
+      const fullInputSchema = this.schemaRegistry.getFullInputSchema(name);
+      if (fullInputSchema) {
+        if (!this.ajv) this.ajv = new Ajv({ allErrors: true });
+        let validator = this.inputValidators.get(name);
+        if (!validator) {
+          validator = this.ajv.compile(fullInputSchema);
+          this.inputValidators.set(name, validator);
+        }
+        const valid = validator(args || {});
+        if (!valid) {
+          const message = `Input schema validation failed for ${name}.`;
+          const guidance = this.lazyInput
+            ? "Use the 'expand_schema' tool to fetch the full input schema for this tool (e.g., { toolName: '" + name + "', path: '' }) and correct the arguments."
+            : 'Please correct the arguments to match the tool input schema.';
+          return {
+            success: false,
+            error: `${message} ${guidance}`,
+            details: { errors: validator.errors }
+          };
+        }
+      }
+    } catch (validationInitError) {
+      // If AJV/validation setup fails, proceed to tool execution; do not block
+    }
+
     switch (name) {
+      case 'expand_schema': {
+        try {
+          const toolName = args?.toolName;
+          const path = args?.path ?? '';
+          const schemaType = args?.schemaType === 'output' ? 'output' : 'input';
+          const schema = this.schemaRegistry.expand(toolName, path, Infinity, schemaType);
+          return { success: true, data: { toolName, path, schemaType, schema } };
+        } catch (e: any) {
+          return { success: false, error: e?.message || 'Failed to expand schema' };
+        }
+      }
       // Metadata Search Tools
       case 'metadata_quick_search':
         return await this.metadataSearchTools.quickSearch(args as any);
@@ -268,6 +308,7 @@ class BigIDMCPServer {
           catalogArgs.filter = FilterConverter.convertToBigIDQuery(catalogArgs.structuredFilter);
           delete catalogArgs.structuredFilter;
         }
+        // Accept structured sort array and format in tool layer as needed
         return await this.catalogTools.getCatalogObjectsPost(catalogArgs as any);
       case 'get_object_details':
         return await this.catalogTools.getObjectDetails(args as any);
@@ -349,10 +390,24 @@ class BigIDMCPServer {
   }
 
   private tools: any[] = [];
+  private schemaRegistry = createSchemaRegistry();
+  private ajv: Ajv | null = null;
+  private inputValidators: Map<string, any> = new Map();
+  private outputValidators: Map<string, any> = new Map();
+  private lazyInput: boolean = true;
+  private hideOutput: boolean = true;
 
   private setupTools() {
-    // Use imported schemas from the schemas directory
-    this.tools = allSchemas;
+    // Allow opt-in lazy schema advertising to cut token usage
+    // Lazy input loading is ON by default. Set BIGID_LAZY_SCHEMAS=false to disable.
+    const lazyEnv = String(process.env.BIGID_LAZY_SCHEMAS || '').toLowerCase();
+    const lazyInput = lazyEnv !== 'false';
+    // Output schema hiding is controlled separately; default true to minimize tokens
+    const hideOutputEnv = String(process.env.BIGID_HIDE_OUTPUT_SCHEMAS || '').toLowerCase();
+    const hideOutput = hideOutputEnv !== 'false';
+    this.lazyInput = lazyInput;
+    this.hideOutput = hideOutput;
+    this.tools = buildAdvertisedSchemas(lazyInput, hideOutput);
 
     // Register tools with the server using proper MCP SDK schemas
     this.server.setRequestHandler(ListToolsRequestSchema, async () => {
@@ -364,6 +419,26 @@ class BigIDMCPServer {
       
       try {
         const result = await this.executeTool(name, args);
+
+        // Validate output schema; attach warnings if hidden, error if not
+        try {
+          const fullOutputSchema = this.schemaRegistry.getFullOutputSchema(name);
+          if (fullOutputSchema) {
+            if (!this.ajv) this.ajv = new Ajv({ allErrors: true });
+            let validator = this.outputValidators.get(name);
+            if (!validator) {
+              validator = this.ajv.compile(fullOutputSchema);
+              this.outputValidators.set(name, validator);
+            }
+            const valid = validator(result);
+            if (!valid) {
+              const warnings = (result as any).warnings || [];
+              warnings.push({ type: 'output_schema_validation', errors: validator.errors });
+              (result as any).warnings = warnings;
+            }
+          }
+        } catch {}
+
         return { 
           content: [{ type: 'text', text: JSON.stringify(result, null, 2) }],
           structuredContent: result 

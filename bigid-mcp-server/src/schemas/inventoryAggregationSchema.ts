@@ -11,7 +11,7 @@ export const inventoryAggregationSchema = {
       },
       sorting: { 
         type: 'array', 
-        description: 'Sorting criteria. Examples: [{"field": "docCount", "order": "DESC"}]',
+        description: 'Sorting criteria for aggregation results',
         items: {
           type: 'object',
           properties: {

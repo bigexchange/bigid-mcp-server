@@ -14,7 +14,7 @@ describe('Simple Schema Validation Tests', () => {
   beforeAll(async () => {
     server = new BigIDMCPServer();
     await server.initialize(true);
-  }, 30000); // 30 second timeout for initialization
+  }, 90000);
 
   afterAll(async () => {
     await server.cleanup();
@@ -62,7 +62,7 @@ describe('Simple Schema Validation Tests', () => {
         }
         console.log('API error for metadata quick search:', error.message);
       }
-    }, 15000);
+    }, 60000);
   });
 
   describe('Metadata Objects Count', () => {

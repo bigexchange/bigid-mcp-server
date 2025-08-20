@@ -12,7 +12,7 @@ describe('get_security_trends Schema Validation', () => {
   beforeAll(async () => {
     server = new BigIDMCPServer();
     await server.initialize(true);
-  }, 30000);
+  }, 90000);
 
   afterAll(async () => {
     await server.cleanup();
@@ -79,7 +79,7 @@ describe('get_security_trends Schema Validation', () => {
           }
           console.log(`API error for ${name}:`, error.message);
         }
-      }, 15000);
+      }, 60000);
     });
   });
 
@@ -100,7 +100,7 @@ describe('get_security_trends Schema Validation', () => {
           expect(error.message).toBeDefined();
         }
       }
-    }, 15000);
+    }, 60000);
 
     test('should handle invalid structuredFilter', async () => {
       const invalidParams = [
@@ -118,7 +118,7 @@ describe('get_security_trends Schema Validation', () => {
           expect(error.message).toBeDefined();
         }
       }
-    }, 15000);
+    }, 60000);
   });
 
   describe('Schema structure validation', () => {
@@ -152,6 +152,6 @@ describe('get_security_trends Schema Validation', () => {
         }
         console.log('API error for trends structure validation:', error.message);
       }
-    }, 15000);
+    }, 60000);
   });
 }); 

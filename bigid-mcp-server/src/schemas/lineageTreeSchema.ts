@@ -1,12 +1,12 @@
 export const lineageTreeSchema = {
   name: 'get_lineage_tree',
-  description: 'Get data relationships and lineage between datasets for impact analysis and GDPR mapping',
+  description: 'Get data relationships and lineage between datasets for impact analysis and GDPR mapping. Requires target: anchorCollections.',
   inputSchema: {
     type: 'object',
     properties: {
       anchorCollections: { 
         type: 'array', 
-        description: 'Array of collection identifiers to establish relationships between. Format: DataSource.Schema.Table. Examples: ["Directory.public.identities", "Human Resources.public.employment"]',
+        description: 'Array of collection identifiers to establish relationships. Format: DataSource.Schema.Table. Example: Directory.public.identities',
         items: { type: 'string' },
         minItems: 1
       },

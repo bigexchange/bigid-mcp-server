@@ -17,6 +17,8 @@ module.exports = {
   coverageDirectory: 'coverage',
   coverageReporters: ['text', 'lcov', 'html'],
   moduleFileExtensions: ['ts', 'js', 'json'],
+  setupFiles: ['<rootDir>/tests/jest.env.setup.js'],
   setupFilesAfterEnv: [],
-  testTimeout: 10000,
+  // Increase global timeout to accommodate sandbox network latencies
+  testTimeout: 90000,
 }; 
