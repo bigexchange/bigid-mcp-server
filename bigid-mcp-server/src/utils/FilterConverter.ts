@@ -54,46 +54,9 @@ export class FilterConverter {
       return null;
     }
 
-    // Check if parameter is broken and warn
-    if (isBrokenParameter(fieldName)) {
-      console.warn(`Warning: Parameter '${fieldName}' is known to not work in BigID API. ${getParameterNotes(fieldName)}`);
+    // Treat unsupported/broken parameters as no-ops without warnings
+    if (isBrokenParameter(fieldName) || isNoDataParameter(fieldName)) {
       return null;
-    }
-
-    // Check if parameter has no data and warn
-    if (isNoDataParameter(fieldName)) {
-      console.warn(`Warning: Parameter '${fieldName}' exists but has no data available. ${getParameterNotes(fieldName)}`);
-      return null;
-    }
-
-    // Check if parameter is partially working and warn
-    if (isPartiallyWorkingParameter(fieldName)) {
-      console.warn(`Warning: Parameter '${fieldName}' is partially working. ${getParameterNotes(fieldName)}`);
-    }
-
-    // Validate entity types against system
-    if (fieldName === 'entityType') {
-      if (Array.isArray(value)) {
-        for (const val of value) {
-          if (typeof val === 'string' && !isValidEntityType(val)) {
-            console.warn(`Warning: Unsupported entity type: ${val}. Supported types: ${getSupportedEntityTypes().join(', ')}`);
-          }
-        }
-      } else if (typeof value === 'string' && !isValidEntityType(value)) {
-        console.warn(`Warning: Unsupported entity type: ${value}. Supported types: ${getSupportedEntityTypes().join(', ')}`);
-      }
-    }
-
-    // Validate sensitivity values
-    if (fieldName === 'sensitivity') {
-      if (Array.isArray(value)) {
-        const invalidValues = value.filter(val => !isValidSensitivityValue(val));
-        if (invalidValues.length > 0) {
-          console.warn(`Warning: Invalid sensitivity values: ${invalidValues.join(', ')}. Valid values: ${getSystemSensitivityValues().join(', ')}`);
-        }
-      } else if (typeof value === 'string' && !isValidSensitivityValue(value)) {
-        console.warn(`Warning: Invalid sensitivity value: ${value}. Valid values: ${getSystemSensitivityValues().join(', ')}`);
-      }
     }
 
     // Get field mapping
@@ -296,11 +259,7 @@ export class FilterConverter {
     const bigidFieldName = mapping.bigidField;
     const operator = getOperatorMapping(filter.operator);
     
-    // Check for notEqual operator which causes errors
-    if (filter.operator === 'notEqual') {
-      console.warn(`Warning: 'notEqual' operator is known to cause errors in BigID API for field '${fieldName}'. Consider using other operators.`);
-      // Still generate the query but warn about potential issues
-    }
+    // Allow notEqual without emitting warnings
     
     // Use to_number function for BigID numeric fields
     return `${bigidFieldName} ${operator} to_number(${filter.value})`;
@@ -310,11 +269,7 @@ export class FilterConverter {
     const bigidFieldName = mapping.bigidField;
     const operator = getOperatorMapping(filter.operator);
 
-    // Check for notEqual operator which causes errors
-    if (filter.operator === 'notEqual') {
-      console.warn(`Warning: 'notEqual' operator is known to cause errors in BigID API for field '${fieldName}'. Consider using other operators.`);
-      // Still generate the query but warn about potential issues
-    }
+    // Allow notEqual without emitting warnings
 
     let dateValue: string;
 
@@ -357,62 +312,9 @@ export class FilterConverter {
   /**
    * Get validation warnings for a filter
    */
-  static getValidationWarnings(filter: StructuredFilter): string[] {
-    const warnings: string[] = [];
-
-    for (const [fieldName, value] of Object.entries(filter)) {
-      if (value === null || value === undefined) continue;
-
-      // Check for broken parameters
-      if (isBrokenParameter(fieldName)) {
-        warnings.push(`Parameter '${fieldName}' is known to not work in BigID API: ${getParameterNotes(fieldName)}`);
-      }
-
-      // Check for no-data parameters
-      if (isNoDataParameter(fieldName)) {
-        warnings.push(`Parameter '${fieldName}' exists but has no data available: ${getParameterNotes(fieldName)}`);
-      }
-
-      // Check for partially working parameters
-      if (isPartiallyWorkingParameter(fieldName)) {
-        warnings.push(`Parameter '${fieldName}' is partially working: ${getParameterNotes(fieldName)}`);
-      }
-
-      // Check entity type validation
-      if (fieldName === 'entityType') {
-        if (Array.isArray(value)) {
-          const invalidTypes = value.filter(type => !isValidEntityType(type));
-          if (invalidTypes.length > 0) {
-            warnings.push(`Unsupported entity types: ${invalidTypes.join(', ')}. Supported: ${getSupportedEntityTypes().join(', ')}`);
-          }
-        } else if (typeof value === 'string' && !isValidEntityType(value)) {
-          warnings.push(`Unsupported entity type: ${value}. Supported: ${getSupportedEntityTypes().join(', ')}`);
-        }
-      }
-
-      // Check sensitivity validation
-      if (fieldName === 'sensitivity') {
-        if (Array.isArray(value)) {
-          const invalidValues = value.filter(val => !isValidSensitivityValue(val));
-          if (invalidValues.length > 0) {
-            warnings.push(`Invalid sensitivity values: ${invalidValues.join(', ')}. Valid: ${getSystemSensitivityValues().join(', ')}`);
-          }
-        } else if (typeof value === 'string' && !isValidSensitivityValue(value)) {
-          warnings.push(`Invalid sensitivity value: ${value}. Valid: ${getSystemSensitivityValues().join(', ')}`);
-        }
-      }
-
-      // Check for notEqual operator usage
-      if (this.isNumberFilter(value) && (value as NumberFilter).operator === 'notEqual') {
-        warnings.push(`'notEqual' operator is known to cause errors in BigID API for field '${fieldName}'. Consider using other operators.`);
-      }
-
-      if (this.isDateFilter(value) && (value as DateFilter).operator === 'notEqual') {
-        warnings.push(`'notEqual' operator is known to cause errors in BigID API for field '${fieldName}'. Consider using other operators.`);
-      }
-    }
-
-    return warnings;
+  static getValidationWarnings(_: StructuredFilter): string[] {
+    // No warnings in production mode; parameters are either supported or ignored silently
+    return [];
   }
 
   /**

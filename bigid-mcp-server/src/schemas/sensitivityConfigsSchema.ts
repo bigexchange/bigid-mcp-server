@@ -17,7 +17,7 @@ export const sensitivityConfigsSchema = {
       },
       sort: {
         type: 'string',
-        description: 'Sorting criteria as JSON array. Examples: [{"field": "name", "order": "asc"}]'
+        description: 'Sorting criteria. Example: sort by name ascending or descending'
       },
       filter: {
         type: 'string',
@@ -78,18 +78,26 @@ export const sensitivityConfigsSchema = {
                     actionStatus: { type: 'object', description: 'Action status' },
                     lastSuccess: { type: 'string', description: 'Last success timestamp' },
                     columnTagging: {
-                      oneOf: [
+                      anyOf: [
                         { type: 'boolean' },
-                        { type: 'null' }
+                        { type: 'null' },
+                        { type: 'string' },
+                        { type: 'number' },
+                        { type: 'object' },
+                        { type: 'array' }
                       ],
-                      description: 'Column tagging setting'
+                      description: 'Column tagging setting (sandbox may return various types)'
                     },
                     dsTagging: {
-                      oneOf: [
+                      anyOf: [
                         { type: 'boolean' },
-                        { type: 'null' }
+                        { type: 'null' },
+                        { type: 'string' },
+                        { type: 'number' },
+                        { type: 'object' },
+                        { type: 'array' }
                       ],
-                      description: 'Data source tagging setting'
+                      description: 'Data source tagging setting (sandbox may return various types)'
                     },
                     updated_at: { type: 'string', description: 'Last update timestamp' },
                     defaultSc: { type: 'boolean', description: 'Whether this is the default sensitivity configuration' },

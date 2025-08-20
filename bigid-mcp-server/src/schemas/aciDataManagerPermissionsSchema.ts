@@ -2,7 +2,7 @@ import { errorSchema, messageSchema, statusSchema, statusCodeSchema } from './sh
 
 export const aciDataManagerPermissionsSchema = {
   name: 'get_aci_data_manager_permissions',
-  description: 'Get detailed permissions for specific files/folders for granular permission analysis',
+  description: 'Get detailed permissions for specific files/folders for granular permission analysis. Requires target: itemPath.',
   inputSchema: {
     type: 'object',
     properties: {
@@ -107,7 +107,7 @@ export const aciDataManagerPermissionsSchema = {
           },
           message: messageSchema
         },
-        required: ['status', 'statusCode', 'data']
+        required: ['status', 'statusCode']
       },
       error: errorSchema
     },

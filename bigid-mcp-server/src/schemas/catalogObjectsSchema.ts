@@ -2,7 +2,7 @@ import { StructuredFilterSchema } from '../types/filterTypes';
 
 export const catalogObjectsSchema = {
   name: 'get_catalog_objects',
-  description: 'USE FOR ANALYSIS - Detailed filtering and compliance audits. Returns full metadata with advanced filtering capabilities. Best for: data inventory, compliance audits, detailed analysis. Use structuredFilter for complex criteria (PII, sensitivity, dates, etc.). Start broad and progressively narrow results.',
+  description: 'USE FOR ANALYSIS - Detailed filtering and compliance audits. Returns full metadata with advanced filtering capabilities. Best for: data inventory, compliance audits, detailed analysis. Use structuredFilter for complex criteria (PII, sensitivity, dates, etc.). Start broad and progressively narrow results. Outputs include fullyQualifiedName for chaining into get_object_details or get_lineage_tree.',
   inputSchema: {
     type: 'object',
     properties: {
@@ -19,10 +19,6 @@ export const catalogObjectsSchema = {
       offset: { 
         type: 'number', 
         description: 'Alternative pagination offset'
-      },
-      sort: { 
-        type: 'string', 
-        description: 'Sorting criteria as JSON array. Examples: [{"field": "name", "order": "asc"}], [{"field": "updated_at", "order": "desc"}]'
       },
       offsetKey: { 
         type: 'string', 
@@ -95,7 +91,11 @@ export const catalogObjectsSchema = {
                         type: 'string'
                       },
                       tagValue: {
-                        type: 'string'
+                        oneOf: [
+                          { type: 'string' },
+                          { type: 'number' }
+                        ],
+                        description: 'Tag value; may be a string or a number (e.g., risk scores)'
                       }
                     }
                   }

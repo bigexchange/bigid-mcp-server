@@ -2,7 +2,7 @@ import { errorSchema } from './sharedSchemas';
 
 export const metadataObjectsSearchSchema = {
   name: 'metadata_objects_search',
-  description: 'Search for objects in the data explorer',
+  description: 'Search for objects in the data explorer. Outputs may include fullyQualifiedName for use with get_object_details and anchor collections for lineage exploration.',
   inputSchema: {
     type: 'object',
     properties: {
@@ -32,8 +32,7 @@ export const metadataObjectsSearchSchema = {
               properties: {
                 entityType: {
                   type: 'string',
-                  enum: ['catalog', 'actionable_insights_cases', 'rdb'],
-                  description: 'Entity type - catalog (data objects), actionable_insights_cases (security cases), rdb (database objects)'
+                  description: 'Entity type identifier. Sandbox may return values outside the documented set (e.g., "file", "policy").',
                 },
                 data: {
                   type: 'object',

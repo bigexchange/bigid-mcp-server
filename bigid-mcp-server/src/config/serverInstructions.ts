@@ -6,6 +6,15 @@ export const SERVER_INSTRUCTIONS = `# BigID MCP Server
 - Limit results (5-50 for interactive, max 200)
 - Use get_catalog_count to scope large queries before detailed analysis
 
+## Lazy Schema Expansion
+- Input schemas are advertised in a token-efficient, top-level form. Nested fields are expandable on demand.
+- Output schemas are hidden by default to reduce context size. Use expand_schema with schemaType=output when you need them.
+- When you need parameter details for any tool input, call the expand_schema tool:
+  - toolName: the target tool name (e.g., get_catalog_objects)
+  - path: JSON Pointer to the node to expand (e.g., /properties/structuredFilter). Empty or '/' returns the full schema.
+- To fetch an output schema (hidden by default), call expand_schema with: { toolName, schemaType: 'output', path: '' }
+- Expand only what you intend to use. Example: before using structuredFilter sub-fields, expand /properties/structuredFilter.
+
 ## Key Workflows
 **Data Discovery**: metadata_quick_search → get_catalog_count → get_catalog_objects
 **Security Investigation**: get_security_cases → get_policies → get_dashboard_widget

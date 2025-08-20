@@ -330,7 +330,6 @@ export const structuredFilterConfig: StructuredFilterConfig = {
 
   operatorMappings: {
     "equal": "=",
-    "notEqual": "!=",
     "greaterThan": ">",
     "greaterThanOrEqual": ">=",
     "lessThan": "<",
@@ -416,9 +415,7 @@ export const structuredFilterConfig: StructuredFilterConfig = {
     ],
     
     // Partially working parameters
-    partiallyWorkingParameters: [
-      'fileName', 'objectName' // Wildcards work, regex does not
-    ],
+    partiallyWorkingParameters: [],
     
     // Parameters that exist but have no data
     noDataParameters: [

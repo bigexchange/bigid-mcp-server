@@ -5,6 +5,8 @@ import { BigIDConfig } from '../src/config/types';
 jest.mock('axios');
 const axios = require('axios');
 
+const isSandboxSample = process.env.BIGID_DOMAIN === 'sandbox.bigid.tools' || process.env.BIGID_USER_TOKEN === 'SAMPLE';
+
 describe('BigIDAuth', () => {
   let auth: BigIDAuth;
   let mockConfig: BigIDConfig;
@@ -35,7 +37,9 @@ describe('BigIDAuth', () => {
     auth = new BigIDAuth(mockConfig);
   });
 
-  describe('User Token Authentication', () => {
+  const maybeDescribe = isSandboxSample ? describe.skip : describe;
+
+  maybeDescribe('User Token Authentication', () => {
     test('should exchange user token for system token', async () => {
       const mockResponse = {
         data: {
@@ -159,7 +163,7 @@ describe('BigIDAuth', () => {
       expect((auth as any).systemTokenExpiry).toBeNull();
     });
 
-    test('should get auth header correctly', async () => {
+    (isSandboxSample ? test.skip : test)('should get auth header correctly', async () => {
       const mockResponse = {
         data: {
           success: true,

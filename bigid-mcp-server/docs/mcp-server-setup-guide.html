@@ -654,6 +654,19 @@
                 <div class="tool-name">get_health_check</div>
                 <div class="tool-description">Get elastic-search health status.</div>
             </div>
+            <div class="tool-item">
+                <div class="tool-name">expand_schema</div>
+                <div class="tool-description">Expand a tool's schema on demand. Use <code>schemaType</code> of <code>input</code> or <code>output</code>; outputs are hidden by default. The tool always returns the full schema at the JSON Pointer path provided.</div>
+            </div>
+        </div>
+
+        <h2>⚙️ Lazy Loading Settings</h2>
+        <div class="info">
+            <p>To minimize token usage, the server advertises truncated input schemas and hides output schemas by default.</p>
+            <ul>
+                <li><code>BIGID_LAZY_SCHEMAS</code> (default <code>true</code>): when true, input schemas are truncated to top-level and examples are stripped.</li>
+                <li><code>BIGID_HIDE_OUTPUT_SCHEMAS</code> (default <code>true</code>): when true, output schemas are omitted from the advertised tool list. Fetch with <code>expand_schema</code> and <code>schemaType</code>=<code>output</code>.</li>
+            </ul>
         </div>
 
         <h2>🚨 Troubleshooting</h2>

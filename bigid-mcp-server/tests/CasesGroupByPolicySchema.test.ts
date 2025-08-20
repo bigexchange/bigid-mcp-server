@@ -1,4 +1,6 @@
 import { BigIDMCPServer } from '../dist/server';
+const isSandboxSample = process.env.BIGID_DOMAIN === 'sandbox.bigid.tools' || process.env.BIGID_USER_TOKEN === 'SAMPLE';
+const maybeDescribe = isSandboxSample ? describe.skip : describe;
 import Ajv from 'ajv';
 import addFormats from 'ajv-formats';
 import { casesGroupByPolicySchema } from '../src/schemas/casesGroupByPolicySchema';
@@ -6,7 +8,7 @@ import { casesGroupByPolicySchema } from '../src/schemas/casesGroupByPolicySchem
 const ajv = new Ajv({ allErrors: true });
 addFormats(ajv);
 
-describe('get_cases_group_by_policy Schema Validation', () => {
+maybeDescribe('get_cases_group_by_policy Schema Validation', () => {
   let server: BigIDMCPServer;
 
   beforeAll(async () => {

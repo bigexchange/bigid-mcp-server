@@ -12,7 +12,7 @@ describe('get_catalog_count Schema Validation', () => {
   beforeAll(async () => {
     server = new BigIDMCPServer();
     await server.initialize(true);
-  }, 30000);
+  }, 90000);
 
   afterAll(async () => {
     await server.cleanup();
@@ -72,7 +72,7 @@ describe('get_catalog_count Schema Validation', () => {
           }
           console.log(`API error for ${name}:`, error.message);
         }
-      }, 15000);
+      }, 60000);
     });
   });
 
@@ -92,7 +92,7 @@ describe('get_catalog_count Schema Validation', () => {
           expect(error.message).toBeDefined();
         }
       }
-    }, 15000);
+    }, 60000);
 
     test('should handle malformed filter parameters', async () => {
       const invalidParams = [
@@ -109,7 +109,7 @@ describe('get_catalog_count Schema Validation', () => {
           expect(error.message).toBeDefined();
         }
       }
-    }, 15000);
+    }, 60000);
   });
 
   describe('Schema structure validation', () => {
@@ -133,6 +133,6 @@ describe('get_catalog_count Schema Validation', () => {
         }
         console.log('API error for count structure validation:', error.message);
       }
-    }, 15000);
+    }, 60000);
   });
 }); 

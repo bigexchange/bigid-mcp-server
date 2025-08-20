@@ -31,9 +31,11 @@ import { metadataFullSearchSchema } from './metadataFullSearchSchema';
 import { metadataObjectsSearchSchema } from './metadataObjectsSearchSchema';
 import { metadataObjectsCountSchema } from './metadataObjectsCountSchema';
 import { piiRecordsSchema } from './piiRecordsSchema';
+import { SchemaRegistry, ToolSchemaDescriptor } from '../utils/SchemaRegistry';
+import { expandSchemaToolSchema } from './expandSchema';
 
 // Re-export shared schemas (remove unused local import)
-export { errorSchema, messageSchema, statusSchema, statusCodeSchema, successResponseSchema } from './sharedSchemas';
+export { errorSchema, messageSchema, statusSchema, statusCodeSchema, successResponseSchema, expandSchemaInput } from './sharedSchemas';
 
 // Re-export all tool schemas
 export { inventoryAggregationSchema } from './inventoryAggregationSchema';
@@ -97,4 +99,67 @@ export const allSchemas = [
   metadataObjectsSearchSchema,
   metadataObjectsCountSchema,
   piiRecordsSchema,
-]; 
+  expandSchemaToolSchema,
+];
+
+/**
+ * Build a registry-aware list of tool schemas to advertise to the MCP client.
+ * - When lazyInput=true, input schemas are truncated to top-level depth and examples stripped
+ * - When hideOutput=true, output schemas are removed from the advertised tool list
+ */
+export function buildAdvertisedSchemas(lazyInput: boolean, hideOutput: boolean) {
+  const registryInput: ToolSchemaDescriptor[] = allSchemas.map((t: any) => ({
+    name: t.name,
+    description: t.description,
+    inputSchema: t.inputSchema,
+    outputSchema: t.outputSchema,
+  }));
+  const registry = new SchemaRegistry(registryInput);
+
+  return allSchemas.map((tool: any) => {
+    let inputSchema = tool.inputSchema;
+
+    if (lazyInput && tool.inputSchema) {
+      inputSchema = registry.createTruncatedInputSchema(tool.inputSchema, 1);
+      // Also strip heavy example arrays under lazy mode to save tokens
+      const stripExamples = (node: any) => {
+        if (!node || typeof node !== 'object') return;
+        if (Array.isArray(node.examples)) {
+          delete node.examples;
+        }
+        for (const key of Object.keys(node)) {
+          const val = (node as any)[key];
+          if (val && typeof val === 'object') stripExamples(val);
+        }
+      };
+      stripExamples(inputSchema);
+    }
+
+    // Append target requirement hint
+    let description = tool.description as string;
+    try {
+      const required: string[] | undefined = tool.inputSchema?.required;
+      if (required && required.length > 0) {
+        const targetFields = required.filter((f: string) => /fullyQualifiedName|objectId|anchorCollections|itemPath/i.test(f));
+        if (targetFields.length > 0) {
+          description = `${description} (Requires target: ${targetFields.join(', ')})`;
+        }
+      }
+    } catch {}
+
+    const advertised: any = { ...tool, description };
+    if (inputSchema) advertised.inputSchema = inputSchema;
+    if (hideOutput && advertised.outputSchema) delete advertised.outputSchema;
+    return advertised;
+  });
+}
+
+export function createSchemaRegistry() {
+  const registryInput: ToolSchemaDescriptor[] = allSchemas.map((t: any) => ({
+    name: t.name,
+    description: t.description,
+    inputSchema: t.inputSchema,
+    outputSchema: t.outputSchema,
+  }));
+  return new SchemaRegistry(registryInput);
+}

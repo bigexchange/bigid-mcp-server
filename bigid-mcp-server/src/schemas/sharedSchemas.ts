@@ -46,6 +46,29 @@ export const successResponseSchema = {
         { type: 'null' }
       ]
     },
-    error: errorSchema
+    error: errorSchema,
+    warnings: {
+      type: 'array',
+      description: 'Non-fatal validation warnings about the response structure',
+      items: {
+        type: 'object',
+        properties: {
+          type: { type: 'string' },
+          errors: { type: 'array', items: { type: 'object' } }
+        },
+        required: ['type']
+      }
+    }
   }
 }; 
+
+// Input schema for the expand_schema tool used by lazy-loading
+export const expandSchemaInput = {
+  type: 'object',
+  properties: {
+    toolName: { type: 'string', description: 'Name of the tool whose input schema to expand. Just the tool name, no prefixes' },
+    path: { type: 'string', description: 'JSON Pointer path into the input schema (e.g., /properties/structuredFilter) or empty for root' },
+    schemaType: { type: 'string', enum: ['input', 'output'], description: 'Which schema to expand. Defaults to input.', default: 'input' }
+  },
+  required: ['toolName'],
+};

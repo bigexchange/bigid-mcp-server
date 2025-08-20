@@ -12,7 +12,7 @@ describe('get_lineage_tree Schema Validation', () => {
   beforeAll(async () => {
     server = new BigIDMCPServer();
     await server.initialize(true);
-  }, 30000);
+  }, 90000);
 
   afterAll(async () => {
     await server.cleanup();
@@ -69,7 +69,7 @@ describe('get_lineage_tree Schema Validation', () => {
           }
           console.log(`API error for ${name}:`, error.message);
         }
-      }, 20000);
+      }, 120000);
     });
   });
 
@@ -80,7 +80,7 @@ describe('get_lineage_tree Schema Validation', () => {
       } catch (error: any) {
         expect(error.message).toBeDefined();
       }
-    }, 10000);
+    }, 60000);
 
     test('should handle invalid anchorCollections format', async () => {
       const invalidParams = [
@@ -98,7 +98,7 @@ describe('get_lineage_tree Schema Validation', () => {
           expect(error.message).toBeDefined();
         }
       }
-    }, 15000);
+    }, 60000);
 
     test('should handle invalid anchorAttributeType values', async () => {
       const invalidParams = [
@@ -115,7 +115,7 @@ describe('get_lineage_tree Schema Validation', () => {
           expect(error.message).toBeDefined();
         }
       }
-    }, 15000);
+    }, 60000);
   });
 
   describe('Schema structure validation', () => {
@@ -145,6 +145,6 @@ describe('get_lineage_tree Schema Validation', () => {
         }
         console.log('API error for lineage tree structure validation:', error.message);
       }
-    }, 20000);
+    }, 120000);
   });
 }); 

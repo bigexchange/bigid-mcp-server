@@ -225,8 +225,8 @@ describe('Structured Filter Validation Tests', () => {
       expect(parsedContent.data).toBeDefined();
     });
 
-    test('should filter email columns', async () => {
-      const filter: StructuredFilter = { columnName: 'email' };
+    test('should filter objects with email in name', async () => {
+      const filter: StructuredFilter = { objectName: '*email*' };
       const result = await server.handleToolCall({
         name: 'get_catalog_objects',
         arguments: {
@@ -396,10 +396,10 @@ describe('Structured Filter Validation Tests', () => {
     });
   });
 
-  describe('Score Filters', () => {
-    test('should filter risk score 5', async () => {
+  describe('Numeric Filters', () => {
+    test('should filter by totalRows', async () => {
       const filter: StructuredFilter = { 
-        riskScore: { operator: 'equal', value: 5 } 
+        totalRows: { operator: 'greaterThan', value: 100 } 
       };
       const result = await server.handleToolCall({
         name: 'get_catalog_objects',
@@ -415,9 +415,9 @@ describe('Structured Filter Validation Tests', () => {
       expect(parsedContent.data).toBeDefined();
     });
 
-    test('should filter quality score 8', async () => {
+    test('should filter by sizeInBytes', async () => {
       const filter: StructuredFilter = { 
-        dataQualityScore: { operator: 'equal', value: 8 } 
+        sizeInBytes: { operator: 'greaterThan', value: 1000000 } 
       };
       const result = await server.handleToolCall({
         name: 'get_catalog_objects',

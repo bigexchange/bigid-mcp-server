@@ -1,6 +1,6 @@
 export const objectDetailsSchema = {
   name: 'get_object_details',
-  description: 'Get detailed metadata for specific objects - deep dive into single object properties',
+  description: 'Get detailed metadata for specific objects - deep dive into single object properties. Requires target: fullyQualifiedName.',
   inputSchema: {
     type: 'object',
     properties: {

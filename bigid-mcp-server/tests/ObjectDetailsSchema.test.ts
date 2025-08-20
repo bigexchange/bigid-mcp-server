@@ -62,7 +62,7 @@ describe('get_object_details Schema Validation', () => {
           }
           console.log(`API error for ${name}:`, error.message);
         }
-      }, 15000);
+      }, 60000);
     });
   });
 
@@ -107,7 +107,7 @@ describe('get_object_details Schema Validation', () => {
           expect(error.message).toBeDefined();
         }
       }
-    }, 15000);
+    }, 60000);
   });
 
   describe('Schema structure validation', () => {

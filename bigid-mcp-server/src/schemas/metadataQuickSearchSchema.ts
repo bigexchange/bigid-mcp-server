@@ -2,7 +2,7 @@ import { errorSchema } from './sharedSchemas';
 
 export const metadataQuickSearchSchema = {
   name: 'metadata_quick_search',
-  description: 'USE FOR DISCOVERY - Finding data by name/content, user interfaces, initial exploration. Returns results grouped by type with search highlighting. Performance: Fast, user-friendly. Use simple terms ("customer", "email") or wildcards ("*customer*"). Start with this for user-facing discovery.',
+  description: 'USE FOR DISCOVERY - Finding data by name/content, user interfaces, initial exploration. Returns results grouped by type with search highlighting. Performance: Fast, user-friendly. Use simple terms ("customer", "email") or wildcards ("*customer*"). Start with this for user-facing discovery. Outputs may include object identifiers usable with get_object_details.',
   inputSchema: {
     type: 'object',
     properties: {

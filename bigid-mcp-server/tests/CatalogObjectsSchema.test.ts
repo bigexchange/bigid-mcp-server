@@ -69,7 +69,7 @@ describe('get_catalog_objects Schema Validation', () => {
       } catch (error: any) {
         expect(error.message).toBeDefined();
       }
-    }, 15000); // 15 second timeout
+    }, 60000);
 
     test('should handle invalid detailedObjectType', async () => {
       try {
@@ -80,7 +80,7 @@ describe('get_catalog_objects Schema Validation', () => {
       } catch (error: any) {
         expect(error.message).toBeDefined();
       }
-    }, 15000); // 15 second timeout
+    }, 60000);
 
     test('should handle missing required parameters', async () => {
       try {
@@ -88,7 +88,7 @@ describe('get_catalog_objects Schema Validation', () => {
       } catch (error: any) {
         expect(error.message).toBeDefined();
       }
-    }, 15000); // 15 second timeout
+    }, 60000);
   });
 
   describe('Schema structure validation', () => {

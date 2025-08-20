@@ -68,7 +68,7 @@ export class DataCatalogClient {
     skip?: number;
     limit?: number;
     offset?: number;
-    sort?: string;
+    sort?: any;
     offsetKey?: string;
     ignoreLimit?: boolean;
     sample?: number;
